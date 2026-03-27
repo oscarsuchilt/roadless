@@ -3,506 +3,561 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Road Less — Estaciona y paga sin manos</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<title>Road Less — Parking Intelligence</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@400;700;800&family=JetBrains+Mono:wght@300;400;700&display=swap" rel="stylesheet">
 <style>
-:root{--green:#1a3a2a;--green-mid:#2d5a3d;--green-light:#4a7c5f;--cream:#f0ead8;--sand:#d4c9a8;--black:#0e0e0e;--white:#fafaf7;--red:#c0392b;}
-*{margin:0;padding:0;box-sizing:border-box;}
+:root{--bg:#020406;--bg2:#060c10;--surface:#0a1520;--surface2:#0f1e2e;--border:rgba(0,210,255,0.08);--border-bright:rgba(0,210,255,0.25);--cyan:#00d2ff;--cyan-dim:rgba(0,210,255,0.15);--cyan-glow:rgba(0,210,255,0.4);--white:#f0f8ff;--muted:rgba(240,248,255,0.45);--dimmer:rgba(240,248,255,0.2);--red:#ff3b5c;--green-neon:#00ff9d;--yellow:#ffd84d;}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;}
-body{background:var(--cream);color:var(--black);font-family:'DM Mono',monospace;overflow-x:hidden;}
+body{background:var(--bg);color:var(--white);font-family:'Space Grotesk',sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased;}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;opacity:.5;}
+::-webkit-scrollbar{width:3px;}::-webkit-scrollbar-track{background:var(--bg);}::-webkit-scrollbar-thumb{background:var(--border-bright);border-radius:2px;}
 
 /* NAV */
-nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:1.2rem 3rem;background:var(--cream);border-bottom:1px solid rgba(26,58,42,.15);}
-.nav-logo{display:flex;align-items:center;gap:.6rem;font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:.1em;color:var(--green);text-decoration:none;}
-.cactus-svg{width:18px;height:28px;fill:var(--green);}
-.nav-cta{background:var(--green);color:var(--cream);font-family:'DM Mono',monospace;font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;padding:.6rem 1.4rem;text-decoration:none;transition:background .2s;}
-.nav-cta:hover{background:var(--black);}
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;display:flex;justify-content:space-between;align-items:center;padding:1.2rem 3rem;background:rgba(2,4,6,0.88);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
+.nav-logo{display:flex;align-items:center;gap:.8rem;font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;letter-spacing:.08em;color:var(--white);text-decoration:none;}
+.logo-mark{width:32px;height:32px;border:1.5px solid var(--cyan);border-radius:8px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 12px var(--cyan-glow),inset 0 0 12px rgba(0,210,255,.05);}
+.logo-mark svg{width:16px;height:16px;fill:var(--cyan);}
+.nav-links{display:flex;gap:2.5rem;align-items:center;list-style:none;}
+.nav-links a{font-size:.72rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s;}
+.nav-links a:hover{color:var(--cyan);}
+.nav-cta{font-family:'JetBrains Mono',monospace;font-size:.7rem;letter-spacing:.1em;padding:.6rem 1.4rem;border:1px solid var(--cyan);color:var(--cyan);text-decoration:none;transition:all .2s;position:relative;overflow:hidden;}
+.nav-cta::before{content:'';position:absolute;inset:0;background:var(--cyan);transform:translateX(-101%);transition:transform .25s ease;z-index:-1;}
+.nav-cta:hover{color:var(--bg);}
+.nav-cta:hover::before{transform:translateX(0);}
 
 /* HERO */
-.hero{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;padding-top:70px;overflow:hidden;}
-.hero-left{background:var(--green);display:flex;flex-direction:column;justify-content:center;padding:5rem 4rem 5rem 5rem;position:relative;overflow:hidden;}
-.hero-left::before{content:'';position:absolute;top:-40px;right:-40px;width:200px;height:200px;border:40px solid rgba(255,255,255,.04);border-radius:50%;}
-.hero-left::after{content:'';position:absolute;bottom:60px;left:-60px;width:300px;height:300px;border:60px solid rgba(255,255,255,.03);border-radius:50%;}
-.hero-tag{font-size:.65rem;letter-spacing:.25em;text-transform:uppercase;color:var(--green-light);margin-bottom:2rem;opacity:0;animation:fadeUp .8s .2s forwards;}
-.hero-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(4rem,7vw,7rem);line-height:.92;color:var(--cream);letter-spacing:.02em;opacity:0;animation:fadeUp .8s .4s forwards;}
-.hero-title .accent{color:var(--sand);font-family:'DM Serif Display',serif;font-style:italic;font-size:.85em;}
-.hero-sub{margin-top:2rem;font-size:.8rem;line-height:1.8;color:rgba(240,234,216,.65);max-width:340px;opacity:0;animation:fadeUp .8s .6s forwards;}
-.hero-btn{margin-top:3rem;display:inline-flex;align-items:center;gap:.8rem;background:var(--cream);color:var(--green);font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:.15em;padding:1rem 2rem;text-decoration:none;transition:background .2s,color .2s,transform .2s;opacity:0;animation:fadeUp .8s .8s forwards;align-self:flex-start;}
-.hero-btn:hover{background:var(--black);color:var(--cream);transform:translateX(4px);}
-.hero-btn svg{width:16px;height:16px;fill:currentColor;}
-.hero-right{background:var(--sand);display:flex;flex-direction:column;justify-content:center;align-items:center;padding:2.5rem;position:relative;overflow:hidden;}
-.checker{position:absolute;inset:0;opacity:.08;background-image:repeating-conic-gradient(var(--green) 0% 25%,transparent 0% 50%);background-size:40px 40px;}
-
-/* CACTUS */
-.hero-cactus-wrap{position:relative;z-index:2;width:100%;max-width:360px;display:flex;align-items:center;justify-content:center;opacity:0;animation:fadeUp .8s 1s forwards;}
-.hero-cactus-wrap svg{width:220px;height:auto;filter:drop-shadow(0 24px 48px rgba(0,0,0,.3));}
-
-/* HERO STATS */
-.hero-stat-grid{position:relative;z-index:2;display:grid;grid-template-columns:1fr 1fr;gap:1px;background:rgba(26,58,42,.2);border:1px solid rgba(26,58,42,.2);width:100%;max-width:360px;margin-top:1.2rem;opacity:0;animation:fadeUp .8s 1.2s forwards;}
-.hero-stat{background:var(--sand);padding:1rem 1.2rem;}
-.hero-stat-num{font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--green);line-height:1;}
-.hero-stat-label{font-size:.55rem;letter-spacing:.12em;text-transform:uppercase;color:var(--green-mid);margin-top:.2rem;}
-.hero-road{position:absolute;bottom:0;left:0;right:0;height:4px;background:var(--green);opacity:.3;}
+.hero{min-height:100vh;padding-top:72px;position:relative;overflow:hidden;}
+.grid-bg{position:absolute;inset:0;background-image:linear-gradient(rgba(0,210,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,210,255,.04) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse 80% 70% at 50% 40%,black 30%,transparent 100%);}
+.grid-bg::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 60% 50%,rgba(0,210,255,.06) 0%,transparent 70%);}
+.scanline{position:absolute;top:72px;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--cyan),transparent);opacity:.5;animation:scan 4s linear infinite;}
+@keyframes scan{from{top:72px;}to{top:100vh;}}
+.hero-inner{position:relative;z-index:2;display:grid;grid-template-columns:1fr 1fr;align-items:center;padding:4rem 3rem 4rem 5rem;gap:3rem;min-height:calc(100vh - 72px);}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:.6rem;font-family:'JetBrains Mono',monospace;font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--cyan);margin-bottom:2rem;opacity:0;animation:fadeUp .8s .1s forwards;}
+.eyebrow-dot{width:6px;height:6px;border-radius:50%;background:var(--cyan);animation:pulse 2s ease infinite;}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 var(--cyan-glow);}50%{box-shadow:0 0 0 6px transparent;}}
+.hero-title{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(3.5rem,6vw,6.5rem);line-height:.92;letter-spacing:-.02em;opacity:0;animation:fadeUp .8s .25s forwards;}
+.line-accent{display:block;background:linear-gradient(135deg,var(--cyan) 0%,#7b61ff 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.line-outline{display:block;-webkit-text-stroke:1px rgba(240,248,255,.2);-webkit-text-fill-color:transparent;}
+.hero-sub{margin-top:2rem;font-size:.95rem;line-height:1.8;color:var(--muted);max-width:420px;opacity:0;animation:fadeUp .8s .4s forwards;}
+.hero-actions{margin-top:2.5rem;display:flex;gap:1rem;align-items:center;opacity:0;animation:fadeUp .8s .55s forwards;}
+.btn-primary{display:inline-flex;align-items:center;gap:.7rem;padding:.9rem 2rem;background:var(--cyan);color:var(--bg);font-family:'Syne',sans-serif;font-weight:700;font-size:.85rem;letter-spacing:.05em;text-decoration:none;transition:all .2s;box-shadow:0 0 30px var(--cyan-glow);clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px));}
+.btn-primary:hover{background:#fff;box-shadow:0 0 50px rgba(0,210,255,.7);transform:translateY(-2px);}
+.btn-ghost{display:inline-flex;align-items:center;gap:.5rem;font-family:'JetBrains Mono',monospace;font-size:.75rem;letter-spacing:.1em;color:var(--muted);text-decoration:none;transition:color .2s;}
+.btn-ghost:hover{color:var(--white);}
+.btn-ghost svg{width:14px;height:14px;fill:currentColor;}
+.hero-right-wrap{opacity:0;animation:fadeUp .8s .4s forwards;}
+.tech-card{background:var(--surface);border:1px solid var(--border-bright);border-radius:2px;overflow:hidden;position:relative;box-shadow:0 0 60px rgba(0,210,255,.05),inset 0 0 60px rgba(0,210,255,.02);}
+.tech-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--cyan),transparent);}
+.card-header{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.4rem;border-bottom:1px solid var(--border);background:rgba(0,210,255,.03);}
+.card-header-title{font-family:'JetBrains Mono',monospace;font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:var(--cyan);}
+.card-dots{display:flex;gap:6px;}
+.card-dots span{width:8px;height:8px;border-radius:50%;background:var(--border-bright);}
+.card-dots span:first-child{background:var(--red);}
+.card-dots span:nth-child(2){background:var(--yellow);}
+.card-dots span:nth-child(3){background:var(--green-neon);}
+.card-body{padding:1.5rem;}
+.lpr-visual{background:var(--bg);border:1px solid var(--border);height:160px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;}
+.lpr-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(0,210,255,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(0,210,255,.06) 1px,transparent 1px);background-size:20px 20px;}
+.lpr-car{position:absolute;font-size:2.5rem;animation:carMove 3s ease-in-out infinite;}
+@keyframes carMove{0%,100%{transform:translateX(-60px) translateY(4px);opacity:0;}15%{opacity:1;transform:translateX(-60px) translateY(4px);}50%{transform:translateX(0) translateY(0);opacity:1;}85%{opacity:1;transform:translateX(60px) translateY(-4px);}90%{opacity:0;}}
+.lpr-beam{position:absolute;left:50%;top:0;bottom:0;width:2px;background:linear-gradient(180deg,transparent,var(--cyan),transparent);animation:beamScan 3s ease-in-out infinite;box-shadow:0 0 10px var(--cyan);}
+@keyframes beamScan{0%,30%{opacity:0;}40%,60%{opacity:1;left:45%;}70%,100%{opacity:0;}}
+.lpr-plate{position:absolute;bottom:16px;left:50%;transform:translateX(-50%) scaleX(0);background:rgba(0,210,255,.1);border:1px solid var(--cyan);padding:4px 14px;font-family:'JetBrains Mono',monospace;font-size:.7rem;letter-spacing:.25em;color:var(--cyan);animation:plateReveal 3s ease-in-out infinite;white-space:nowrap;}
+@keyframes plateReveal{0%,35%{opacity:0;transform:translateX(-50%) scaleX(0);}50%,80%{opacity:1;transform:translateX(-50%) scaleX(1);}90%,100%{opacity:0;}}
+.lpr-status{position:absolute;top:12px;right:12px;font-family:'JetBrains Mono',monospace;font-size:.55rem;color:var(--green-neon);animation:statusBlink 3s ease-in-out infinite;}
+@keyframes statusBlink{0%,35%{opacity:0;}50%{opacity:1;}80%,100%{opacity:0;}}
+.lpr-corner{position:absolute;width:16px;height:16px;border-color:var(--cyan);border-style:solid;animation:cornerFade 3s ease-in-out infinite;}
+@keyframes cornerFade{0%,35%{opacity:.1;}45%,70%{opacity:.6;}85%,100%{opacity:.1;}}
+.lpr-corner.tl{top:8px;left:8px;border-width:1px 0 0 1px;}
+.lpr-corner.tr{top:8px;right:8px;border-width:1px 1px 0 0;}
+.lpr-corner.bl{bottom:8px;left:8px;border-width:0 0 1px 1px;}
+.lpr-corner.br{bottom:8px;right:8px;border-width:0 1px 1px 0;}
+.stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);}
+.stat-cell{background:var(--surface);padding:1rem;text-align:center;}
+.stat-num{font-family:'Syne',sans-serif;font-weight:800;font-size:1.6rem;color:var(--cyan);line-height:1;}
+.stat-label{font-family:'JetBrains Mono',monospace;font-size:.5rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-top:.3rem;}
 
 /* TICKER */
-.ticker{background:var(--green);color:var(--cream);padding:.8rem 0;overflow:hidden;white-space:nowrap;}
-.ticker-inner{display:inline-block;animation:ticker 22s linear infinite;font-family:'Bebas Neue',sans-serif;font-size:.9rem;letter-spacing:.2em;}
-.ticker-sep{margin:0 2rem;opacity:.4;}
+.ticker-wrap{border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:var(--bg2);overflow:hidden;padding:.7rem 0;position:relative;}
+.ticker-wrap::before,.ticker-wrap::after{content:'';position:absolute;top:0;bottom:0;width:80px;z-index:2;}
+.ticker-wrap::before{left:0;background:linear-gradient(90deg,var(--bg2),transparent);}
+.ticker-wrap::after{right:0;background:linear-gradient(-90deg,var(--bg2),transparent);}
+.ticker-track{display:inline-flex;animation:ticker 30s linear infinite;white-space:nowrap;}
+.ticker-item{display:inline-flex;align-items:center;gap:1.5rem;padding:0 2rem;font-family:'JetBrains Mono',monospace;font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--dimmer);}
+.t-accent{color:var(--cyan);}
+.ticker-sep{color:var(--border-bright);}
+@keyframes ticker{from{transform:translateX(0);}to{transform:translateX(-50%);}}
 
-/* SECTION TAG */
-.section-tag{font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;color:var(--green-light);margin-bottom:1.2rem;display:flex;align-items:center;gap:.8rem;}
-.section-tag::before{content:'';display:block;width:24px;height:1px;background:var(--green-light);}
+/* SECTION BASE */
+.section-label{display:inline-flex;align-items:center;gap:.7rem;font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.25em;text-transform:uppercase;color:var(--cyan);margin-bottom:1.5rem;}
+.section-label::before{content:'//';color:var(--dimmer);}
+.section-title{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(2.2rem,4vw,3.8rem);line-height:.95;letter-spacing:-.02em;}
 
 /* PROBLEM */
-.problem{padding:8rem 5rem;display:grid;grid-template-columns:1fr 1fr;gap:6rem;align-items:center;background:var(--white);position:relative;overflow:hidden;}
-.problem::before{content:'FRICCIÓN';position:absolute;font-family:'Bebas Neue',sans-serif;font-size:18vw;color:rgba(26,58,42,.03);top:50%;left:50%;transform:translate(-50%,-50%);white-space:nowrap;pointer-events:none;}
-.problem-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.5rem,4vw,4rem);line-height:.95;color:var(--black);}
-.problem-title .strike{text-decoration:line-through;color:var(--red);font-family:'DM Serif Display',serif;font-style:italic;}
-.problem-tagline{margin-top:1.5rem;font-family:'DM Serif Display',serif;font-style:italic;font-size:1.2rem;color:var(--green);line-height:1.4;}
-.problem-list{list-style:none;display:flex;flex-direction:column;gap:0;margin-top:2rem;}
-.problem-item{display:flex;align-items:flex-start;gap:1rem;padding:1.2rem 0;border-bottom:1px solid rgba(26,58,42,.1);}
-.problem-num{font-family:'Bebas Neue',sans-serif;font-size:2rem;line-height:1;color:rgba(26,58,42,.15);min-width:40px;}
-.problem-text{font-size:.8rem;line-height:1.7;color:#444;}
-.problem-text strong{color:var(--black);}
-.problem-right{background:var(--sand);padding:3rem;border-left:4px solid var(--green);}
-.problem-quote{font-family:'DM Serif Display',serif;font-style:italic;font-size:1.5rem;line-height:1.5;color:var(--green);}
-.problem-quote-sub{margin-top:1.5rem;font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:var(--green-light);}
+.problem{padding:8rem 5rem;display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:start;background:var(--bg2);position:relative;}
+.problem::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--border-bright),transparent);}
+.problem-title{margin-top:1rem;}
+.problem-title .strike{text-decoration:line-through;-webkit-text-stroke:1px var(--red);-webkit-text-fill-color:transparent;text-decoration-color:var(--red);}
+.problem-title .hl{color:var(--cyan);}
+.problem-sub{margin-top:1.5rem;font-size:.9rem;line-height:1.8;color:var(--muted);}
+.problem-items{margin-top:3rem;display:flex;flex-direction:column;}
+.problem-item{display:flex;gap:1.5rem;padding:1.5rem 0;border-bottom:1px solid var(--border);transition:all .2s;}
+.problem-item:first-child{border-top:1px solid var(--border);}
+.problem-item:hover{padding-left:.5rem;}
+.p-num{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--cyan);opacity:.5;min-width:32px;padding-top:2px;}
+.p-title{font-family:'Syne',sans-serif;font-weight:700;font-size:.95rem;color:var(--white);margin-bottom:.4rem;}
+.p-text{font-size:.8rem;line-height:1.7;color:var(--muted);}
+.quote-block{background:var(--surface);border:1px solid var(--border-bright);border-left:3px solid var(--cyan);padding:2.5rem;position:relative;margin-top:3rem;}
+.quote-block::before{content:'"';position:absolute;top:-1.5rem;left:2rem;font-family:'Syne',sans-serif;font-size:6rem;color:var(--cyan);opacity:.15;line-height:1;}
+.quote-text{font-family:'Syne',sans-serif;font-weight:700;font-size:1.1rem;line-height:1.6;color:var(--white);}
+.quote-source{margin-top:1.5rem;font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:var(--cyan);}
 
 /* HOW */
-.how{background:var(--white);padding:7rem 5rem 6rem;position:relative;}
-.how-header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:3.5rem;}
-.how-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(3rem,5vw,5rem);color:var(--black);line-height:.9;}
-.how-title span{display:block;font-family:'DM Serif Display',serif;font-style:italic;color:var(--green);}
-
-/* ANIMATION STAGE */
-.anim-stage{position:relative;width:100%;height:220px;background:var(--sand);border-radius:14px;overflow:hidden;border:1px solid rgba(26,58,42,.12);}
-.anim-stage::before{content:'';position:absolute;inset:0;background-image:repeating-conic-gradient(#c8bc9a 0% 25%,var(--sand) 0% 50%);background-size:24px 24px;opacity:.45;}
-.anim-road{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);height:66px;background:#b5aa88;border-top:2px solid rgba(26,58,42,.2);border-bottom:2px solid rgba(26,58,42,.2);}
-.anim-road-dash{position:absolute;top:50%;transform:translateY(-50%);left:0;right:0;height:2px;background:repeating-linear-gradient(90deg,rgba(26,58,42,.28) 0 16px,transparent 16px 30px);}
+.how{padding:8rem 5rem;background:var(--bg);position:relative;}
+.how-grid{display:grid;grid-template-columns:1fr 1.4fr;gap:5rem;align-items:start;}
+.steps{display:flex;flex-direction:column;margin-top:3rem;}
+.step{display:flex;gap:1.5rem;padding:1.8rem 0;border-bottom:1px solid var(--border);position:relative;transition:all .25s;}
+.step:first-child{border-top:1px solid var(--border);}
+.step::before{content:'';position:absolute;left:-1px;top:0;bottom:0;width:2px;background:var(--cyan);transform:scaleY(0);transform-origin:top;transition:transform .4s ease;}
+.step:hover::before{transform:scaleY(1);}
+.step:hover{padding-left:1rem;}
+.step-num{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--cyan);min-width:28px;padding-top:2px;}
+.step-title{font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;color:var(--white);margin-bottom:.5rem;}
+.step-text{font-size:.8rem;line-height:1.7;color:var(--muted);}
+.anim-panel{background:var(--surface);border:1px solid var(--border-bright);overflow:hidden;position:sticky;top:100px;}
+.panel-header{display:flex;align-items:center;justify-content:space-between;padding:.9rem 1.4rem;background:var(--surface2);border-bottom:1px solid var(--border);}
+.panel-title{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:var(--cyan);}
+.panel-status{display:flex;align-items:center;gap:.5rem;font-family:'JetBrains Mono',monospace;font-size:.55rem;color:var(--green-neon);}
+.status-dot{width:5px;height:5px;border-radius:50%;background:var(--green-neon);animation:blink 1s ease infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:.3;}}
+.anim-stage{position:relative;height:200px;background:var(--bg);overflow:hidden;}
+.anim-road{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);height:60px;background:rgba(10,21,32,.8);border-top:1px solid var(--border-bright);border-bottom:1px solid var(--border-bright);}
+.anim-dashes{position:absolute;top:50%;left:0;right:0;height:1px;background:repeating-linear-gradient(90deg,rgba(0,210,255,.3) 0 20px,transparent 20px 36px);transform:translateY(-50%);}
 .anim-gate{position:absolute;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;align-items:center;z-index:10;}
-.anim-gate-entry{left:70px;}
-.anim-gate-exit{right:70px;}
-.anim-gate-post{width:9px;height:36px;background:var(--green);border-radius:4px;position:relative;}
-.anim-gate-arm{position:absolute;top:3px;left:9px;width:50px;height:8px;background:var(--red);border-radius:4px;transform-origin:left center;transform:rotate(0deg);transition:transform .45s cubic-bezier(.34,1.56,.64,1);}
-.anim-gate-arm.open{transform:rotate(-90deg);}
-.anim-gate-label{position:absolute;bottom:-24px;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:rgba(26,58,42,.6);white-space:nowrap;}
-.anim-parking{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:52px;height:66px;border:2px dashed rgba(26,58,42,.32);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:rgba(26,58,42,.32);transition:all .4s;z-index:5;}
-.anim-parking.occupied{border-color:rgba(26,58,42,.6);background:rgba(26,58,42,.07);color:rgba(26,58,42,.5);}
-.anim-scan-beam{position:absolute;top:50%;transform:translateY(-50%);left:74px;width:0;height:66px;background:linear-gradient(90deg,rgba(74,200,120,0),rgba(74,200,120,.4),rgba(74,200,120,0));opacity:0;pointer-events:none;z-index:20;transition:width .4s,opacity .3s;}
-.anim-scan-beam.show{width:140px;opacity:1;}
-.anim-plate-bubble{position:absolute;top:14px;left:50%;transform:translateX(-50%) translateY(-8px);background:var(--green);color:var(--sand);font-size:12px;font-weight:700;letter-spacing:.2em;padding:5px 18px;border-radius:100px;white-space:nowrap;opacity:0;transition:opacity .35s,transform .35s;z-index:30;pointer-events:none;}
-.anim-plate-bubble.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.anim-gate-entry{left:60px;}
+.anim-gate-exit{right:60px;}
+.gate-post{width:6px;height:30px;background:var(--cyan);box-shadow:0 0 10px var(--cyan-glow);border-radius:2px;position:relative;}
+.gate-arm{position:absolute;top:2px;left:6px;width:44px;height:6px;background:var(--red);border-radius:2px;transform-origin:left center;transition:transform .4s cubic-bezier(.34,1.56,.64,1);box-shadow:0 0 8px rgba(255,59,92,.5);}
+.gate-arm.open{transform:rotate(-90deg);}
+.gate-label{position:absolute;bottom:-20px;font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:var(--dimmer);white-space:nowrap;}
+.anim-parking-spot{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:44px;height:60px;border:1px dashed rgba(0,210,255,.25);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;color:rgba(0,210,255,.25);z-index:5;transition:all .4s;}
+.anim-parking-spot.occupied{border-color:rgba(0,210,255,.5);background:rgba(0,210,255,.05);}
+.scan-beam{position:absolute;top:50%;transform:translateY(-50%);left:62px;width:0;height:60px;background:linear-gradient(90deg,transparent,rgba(0,210,255,.3),transparent);opacity:0;z-index:20;transition:width .4s,opacity .3s;}
+.scan-beam.show{width:120px;opacity:1;}
+.plate-tag{position:absolute;top:10px;left:50%;transform:translateX(-50%) scale(.8);background:rgba(0,210,255,.1);border:1px solid var(--cyan);padding:3px 12px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;color:var(--cyan);opacity:0;transition:all .35s;white-space:nowrap;z-index:30;}
+.plate-tag.show{opacity:1;transform:translateX(-50%) scale(1);}
 #animCanvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:15;}
-
-/* ACTION PANEL */
-.anim-action{margin-top:1.6rem;display:flex;align-items:center;gap:1.4rem;min-height:88px;background:var(--green);border-radius:14px;padding:1.2rem 2rem;}
-.anim-icon{font-size:44px;line-height:1;flex-shrink:0;filter:drop-shadow(0 2px 8px rgba(0,0,0,.3));}
-.anim-title{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:.04em;color:var(--cream);margin-bottom:2px;}
-.anim-sub{font-size:.72rem;letter-spacing:.08em;color:rgba(212,201,168,.58);}
-
-/* STEP PILLS */
-.anim-steps{display:flex;gap:.6rem;margin-top:1.2rem;justify-content:center;}
-.anim-step{background:rgba(26,58,42,.06);border:1.5px solid rgba(26,58,42,.12);border-radius:100px;padding:7px 22px;font-size:.78rem;letter-spacing:.07em;color:rgba(26,58,42,.38);transition:all .35s;white-space:nowrap;cursor:default;}
-.anim-step.active{background:var(--green);border-color:var(--green);color:var(--cream);font-weight:700;}
-.anim-step.done{background:rgba(26,58,42,.1);border-color:rgba(26,58,42,.35);color:var(--green);}
+.action-bar{display:flex;align-items:center;gap:1.2rem;padding:1.2rem 1.4rem;background:var(--surface2);border-top:1px solid var(--border);min-height:72px;}
+.action-icon{font-size:2rem;line-height:1;}
+.action-title{font-family:'Syne',sans-serif;font-weight:700;font-size:.95rem;color:var(--white);margin-bottom:2px;}
+.action-sub{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.12em;text-transform:uppercase;color:var(--cyan);opacity:.6;}
+.step-pills{display:flex;border-top:1px solid var(--border);}
+.step-pill{flex:1;padding:.7rem;text-align:center;font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--dimmer);border-right:1px solid var(--border);transition:all .3s;}
+.step-pill:last-child{border-right:none;}
+.step-pill.active{background:rgba(0,210,255,.1);color:var(--cyan);}
+.step-pill.done{color:rgba(0,255,157,.6);}
 
 /* PRICING */
-.pricing{background:var(--cream);padding:8rem 5rem;display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start;}
-.price-big{font-family:'Bebas Neue',sans-serif;font-size:clamp(5rem,12vw,11rem);line-height:.85;color:var(--green);letter-spacing:-.02em;}
-.price-label{font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--green-light);margin-top:.5rem;}
-.price-desc{margin-top:2rem;font-size:.8rem;line-height:1.9;color:#555;max-width:380px;border-left:3px solid var(--green);padding-left:1.5rem;}
-.timeline{margin-top:3rem;display:flex;flex-direction:column;}
-.timeline-item{display:flex;gap:1.5rem;align-items:flex-start;padding:1.2rem 0;border-bottom:1px solid rgba(26,58,42,.08);}
-.timeline-dot{width:28px;height:28px;min-width:28px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:.8rem;color:var(--cream);margin-top:2px;}
-.timeline-label{font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--green-mid);}
-.timeline-text{font-size:.75rem;line-height:1.6;color:#555;margin-top:.2rem;}
-.price-right{background:var(--black);padding:3rem;color:var(--cream);}
-.price-right-title{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:.1em;color:var(--sand);margin-bottom:2rem;padding-bottom:1rem;border-bottom:1px solid rgba(255,255,255,.1);}
-.price-row{display:flex;justify-content:space-between;font-size:.75rem;padding:.8rem 0;border-bottom:1px solid rgba(255,255,255,.06);color:rgba(255,255,255,.65);}
-.price-row.total{color:var(--cream);font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:.08em;border-bottom:none;margin-top:.5rem;padding-top:1rem;border-top:1px solid rgba(255,255,255,.2);}
-.price-row span:last-child{color:var(--cream);}
-.price-row.total span:last-child{color:var(--sand);}
-.price-note{font-size:.6rem;margin-top:1.5rem;color:rgba(255,255,255,.25);letter-spacing:.1em;text-transform:uppercase;}
+.pricing{padding:8rem 5rem;background:var(--bg2);display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start;}
+.price-display{display:flex;align-items:baseline;gap:.5rem;margin:1rem 0;}
+.price-num{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(5rem,10vw,9rem);line-height:.9;color:var(--cyan);text-shadow:0 0 40px var(--cyan-glow);}
+.price-currency{font-family:'JetBrains Mono',monospace;font-size:1.2rem;color:var(--muted);align-self:flex-start;margin-top:1.2rem;}
+.price-tag{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);}
+.price-desc{margin-top:1.5rem;font-size:.85rem;line-height:1.9;color:var(--muted);border-left:2px solid var(--cyan);padding-left:1.2rem;max-width:380px;}
+.timeline{margin-top:2.5rem;display:flex;flex-direction:column;}
+.tl-item{display:grid;grid-template-columns:auto 1fr;gap:1.2rem;padding:1.4rem 0;border-bottom:1px solid var(--border);align-items:start;}
+.tl-item:first-child{border-top:1px solid var(--border);}
+.tl-num{width:26px;height:26px;border:1px solid var(--cyan);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--cyan);}
+.tl-phase{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:var(--cyan);margin-bottom:.35rem;}
+.tl-text{font-size:.8rem;line-height:1.7;color:var(--muted);}
+.receipt{background:var(--surface);border:1px solid var(--border-bright);overflow:hidden;}
+.receipt-header{background:var(--surface2);padding:1rem 1.5rem;border-bottom:1px solid var(--border);font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--cyan);display:flex;justify-content:space-between;}
+.receipt-body{padding:1.5rem;}
+.receipt-row{display:flex;justify-content:space-between;align-items:center;padding:.8rem 0;border-bottom:1px solid var(--border);font-size:.8rem;color:var(--muted);}
+.receipt-row:last-of-type{border-bottom:none;}
+.receipt-row span:last-child{color:var(--white);font-family:'JetBrains Mono',monospace;}
+.receipt-total{padding:1rem 1.5rem;background:rgba(0,210,255,.05);border-top:1px solid var(--border-bright);display:flex;justify-content:space-between;align-items:center;}
+.receipt-total-label{font-family:'Syne',sans-serif;font-weight:700;font-size:.85rem;color:var(--white);}
+.receipt-total-num{font-family:'Syne',sans-serif;font-weight:800;font-size:1.5rem;color:var(--cyan);}
+.receipt-note{padding:.8rem 1.5rem;font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.12em;color:var(--dimmer);text-transform:uppercase;border-top:1px dashed var(--border);text-align:center;}
 
-/* EXISTING EQUIPMENT */
-.existing{background:var(--sand);padding:6rem 5rem;}
-.existing-header{margin-bottom:3.5rem;}
-.existing-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(2rem,4vw,3.5rem);line-height:.95;color:var(--green);}
-.existing-title em{font-family:'DM Serif Display',serif;font-style:italic;color:var(--green-mid);}
-.exist-list{display:flex;flex-direction:column;gap:2.5rem;max-width:700px;}
-.exist-item{display:flex;gap:1.8rem;align-items:flex-start;padding-bottom:2.5rem;border-bottom:1px solid rgba(26,58,42,.12);}
-.exist-item:last-child{border-bottom:none;padding-bottom:0;}
-.exist-icon-box{width:52px;height:52px;min-width:52px;background:var(--green);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;box-shadow:0 4px 12px rgba(26,58,42,.25);}
-.exist-name{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:.04em;color:var(--black);margin-bottom:.4rem;}
-.exist-text{font-size:.8rem;line-height:1.75;color:#555;}
+/* COMPAT */
+.compat{padding:8rem 5rem;background:var(--bg);}
+.compat-grid{display:grid;grid-template-columns:1fr 1.5fr;gap:5rem;align-items:center;margin-top:3rem;}
+.compat-items{display:flex;flex-direction:column;gap:1.5rem;}
+.compat-item{display:flex;gap:1.5rem;align-items:flex-start;padding:1.5rem;background:var(--surface);border:1px solid var(--border);transition:all .25s;position:relative;overflow:hidden;}
+.compat-item::after{content:'';position:absolute;top:0;left:0;width:2px;height:100%;background:var(--cyan);transform:scaleY(0);transform-origin:top;transition:transform .3s ease;}
+.compat-item:hover{border-color:var(--border-bright);}
+.compat-item:hover::after{transform:scaleY(1);}
+.compat-icon{width:44px;height:44px;min-width:44px;background:var(--surface2);border:1px solid var(--border-bright);display:flex;align-items:center;justify-content:center;font-size:1.2rem;}
+.compat-name{font-family:'Syne',sans-serif;font-weight:700;font-size:.95rem;color:var(--white);margin-bottom:.4rem;}
+.compat-text{font-size:.78rem;line-height:1.7;color:var(--muted);}
+.diagram{background:var(--surface);border:1px solid var(--border-bright);padding:2rem;position:relative;}
+.diagram::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--cyan),transparent);}
+.diagram-title{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.2em;text-transform:uppercase;color:var(--cyan);margin-bottom:2rem;}
+.diagram-nodes{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--border);}
+.diag-node{background:var(--surface2);padding:1.2rem;text-align:center;}
+.diag-node-icon{font-size:1.8rem;margin-bottom:.5rem;}
+.diag-node-name{font-family:'Syne',sans-serif;font-weight:700;font-size:.7rem;color:var(--white);margin-bottom:.3rem;}
+.diag-node-sub{font-family:'JetBrains Mono',monospace;font-size:.5rem;color:var(--muted);letter-spacing:.1em;}
+.diag-arrow{text-align:center;color:var(--cyan);padding:.8rem;background:var(--surface);grid-column:1 / -1;font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.2em;text-transform:uppercase;}
 
 /* BENEFITS */
-.benefits{background:var(--white);padding:8rem 5rem;position:relative;overflow:hidden;}
-.benefits::before{content:'WINS';position:absolute;font-family:'Bebas Neue',sans-serif;font-size:22vw;color:rgba(26,58,42,.025);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;}
-.benefits-header{margin-bottom:3rem;}
-.benefits-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.5rem,5vw,5rem);line-height:.9;color:var(--black);}
-.benefits-title span{font-family:'DM Serif Display',serif;font-style:italic;color:var(--green);}
-.benefits-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem;position:relative;z-index:1;}
-.benefit-card{background:var(--cream);border-radius:16px;padding:2rem 1.8rem;border:1px solid rgba(26,58,42,.08);transition:transform .25s ease,box-shadow .25s ease,background .2s;cursor:default;}
-.benefit-card:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(26,58,42,.12);background:var(--white);}
-.benefit-icon-box{width:48px;height:48px;background:rgba(26,58,42,.07);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;margin-bottom:1.1rem;transition:background .2s;}
-.benefit-card:hover .benefit-icon-box{background:rgba(26,58,42,.12);}
-.benefit-title{font-family:'Bebas Neue',sans-serif;font-size:1.15rem;letter-spacing:.04em;color:var(--black);margin-bottom:.5rem;}
-.benefit-text{font-size:.75rem;line-height:1.75;color:#666;}
+.benefits{padding:8rem 5rem;background:var(--bg2);position:relative;}
+.benefits-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);margin-top:3rem;}
+.benefit{background:var(--bg2);padding:2.5rem 2rem;position:relative;overflow:hidden;transition:background .2s;}
+.benefit::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:var(--cyan);transform:scaleX(0);transform-origin:left;transition:transform .4s ease;}
+.benefit:hover{background:var(--surface);}
+.benefit:hover::before{transform:scaleX(1);}
+.benefit-num{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.2em;color:var(--cyan);opacity:.4;margin-bottom:1.5rem;}
+.benefit-icon{font-size:1.8rem;margin-bottom:1rem;}
+.benefit-title{font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;color:var(--white);margin-bottom:.6rem;}
+.benefit-text{font-size:.78rem;line-height:1.75;color:var(--muted);}
 
 /* TIMING */
-.timing{background:var(--green);padding:8rem 5rem;display:grid;grid-template-columns:1fr 1fr;gap:6rem;align-items:center;position:relative;overflow:hidden;}
-.timing::before{content:'';position:absolute;inset:0;background-image:repeating-conic-gradient(rgba(255,255,255,.02) 0% 25%,transparent 0% 50%);background-size:40px 40px;}
-.timing-left{position:relative;z-index:1;}
-.timing-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.5rem,5vw,5rem);line-height:.9;color:var(--cream);}
-.timing-title span{font-family:'DM Serif Display',serif;font-style:italic;color:var(--sand);}
-.timing-tags{margin-top:2rem;display:flex;flex-wrap:wrap;gap:.8rem;}
-.timing-tag{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);padding:.4rem 1rem;font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(240,234,216,.7);}
-.timing-right{position:relative;z-index:1;}
-.timing-stat{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);padding:3rem;}
-.timing-stat-num{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.5rem,4vw,4rem);line-height:1;color:var(--sand);}
-.timing-stat-text{margin-top:1rem;font-size:.78rem;line-height:1.8;color:rgba(240,234,216,.65);}
-.timing-sub{margin-top:1.5rem;font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(240,234,216,.3);}
+.timing{padding:8rem 5rem;background:var(--bg);display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center;}
+.timing-title{margin-top:1rem;}
+.glow{color:var(--cyan);text-shadow:0 0 40px var(--cyan-glow);}
+.timing-tags{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:2rem;}
+.timing-tag{padding:.35rem .9rem;border:1px solid var(--border-bright);font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);}
+.big-stat{background:var(--surface);border:1px solid var(--border-bright);padding:3rem;position:relative;}
+.big-stat::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--cyan),#7b61ff);}
+.big-stat-num{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(2rem,4vw,3.5rem);color:var(--cyan);line-height:1;}
+.big-stat-text{margin-top:1rem;font-size:.82rem;line-height:1.8;color:var(--muted);}
+.big-stat-source{margin-top:1.5rem;font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.15em;text-transform:uppercase;color:var(--dimmer);}
 
 /* MANIFESTO */
-.manifesto{background:var(--black);padding:10rem 5rem;text-align:center;position:relative;overflow:hidden;}
-.manifesto::before{content:'';position:absolute;inset:0;background-image:repeating-conic-gradient(rgba(255,255,255,.015) 0% 25%,transparent 0% 50%);background-size:50px 50px;}
-.manifesto-text{position:relative;z-index:1;font-family:'DM Serif Display',serif;font-style:italic;font-size:clamp(1.5rem,3vw,2.5rem);line-height:1.5;color:var(--cream);max-width:700px;margin:0 auto;}
-.manifesto-text .highlight{color:var(--sand);font-style:normal;font-family:'Bebas Neue',sans-serif;font-size:1.1em;letter-spacing:.05em;}
-.manifesto-sub{position:relative;z-index:1;margin-top:3rem;font-size:.65rem;letter-spacing:.3em;text-transform:uppercase;color:rgba(255,255,255,.3);}
+.manifesto{padding:10rem 5rem;background:var(--bg);text-align:center;position:relative;border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
+.manifesto-text{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(1.8rem,3.5vw,3rem);line-height:1.2;color:var(--white);max-width:720px;margin:0 auto;letter-spacing:-.01em;}
+.manifesto-text .dim{color:var(--dimmer);font-weight:400;}
+.accent-line{display:block;background:linear-gradient(135deg,var(--cyan),#7b61ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.manifesto-sub{margin-top:2.5rem;font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;color:var(--dimmer);}
 
 /* CTA */
-.cta-section{background:var(--green);padding:8rem 5rem;display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;position:relative;overflow:hidden;}
-.cta-section::after{content:'';position:absolute;right:-100px;top:50%;transform:translateY(-50%);width:400px;height:400px;border:80px solid rgba(255,255,255,.03);border-radius:50%;}
-.cta-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(3rem,5vw,5rem);line-height:.9;color:var(--cream);}
-.cta-title em{font-family:'DM Serif Display',serif;font-style:italic;color:var(--sand);display:block;}
-.cta-sub{margin-top:1.5rem;font-size:.75rem;line-height:1.8;color:rgba(240,234,216,.55);max-width:350px;}
-.cta-right{display:flex;flex-direction:column;gap:1rem;position:relative;z-index:1;}
-.cta-btn-wa{display:flex;align-items:center;justify-content:center;gap:1rem;background:var(--cream);color:var(--green);font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:.1em;padding:1.5rem 2rem;text-decoration:none;transition:background .2s,transform .2s;}
-.cta-btn-wa:hover{background:var(--sand);transform:translateY(-2px);}
-.cta-btn-wa svg{width:22px;height:22px;fill:currentColor;}
-.cta-note{font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(240,234,216,.35);text-align:center;}
-.cta-contact-alt{margin-top:.5rem;display:flex;flex-direction:column;gap:.5rem;}
-.cta-contact-alt a{font-size:.7rem;color:rgba(240,234,216,.5);text-decoration:none;letter-spacing:.05em;transition:color .2s;}
-.cta-contact-alt a:hover{color:var(--sand);}
+.cta{padding:8rem 5rem;background:var(--bg2);display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;position:relative;}
+.cta::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 50% 80% at 70% 50%,rgba(0,210,255,.04) 0%,transparent 70%);}
+.cta-title{margin-top:1rem;}
+.cta-title em{font-style:normal;-webkit-text-stroke:1px rgba(240,248,255,.2);-webkit-text-fill-color:transparent;}
+.cta-sub{margin-top:1.5rem;font-size:.85rem;line-height:1.8;color:var(--muted);}
+.cta-right{position:relative;z-index:1;display:flex;flex-direction:column;gap:.8rem;}
+.btn-wa{display:flex;align-items:center;justify-content:center;gap:1rem;padding:1.4rem 2rem;background:var(--cyan);color:var(--bg);font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;letter-spacing:.05em;text-decoration:none;transition:all .2s;box-shadow:0 0 40px var(--cyan-glow);clip-path:polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,14px 100%,0 calc(100% - 14px));}
+.btn-wa:hover{background:#fff;box-shadow:0 0 60px rgba(0,210,255,.8);transform:translateY(-3px);}
+.btn-wa svg{width:20px;height:20px;fill:currentColor;}
+.cta-note{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.15em;text-transform:uppercase;color:var(--dimmer);text-align:center;}
+.cta-contacts{display:flex;flex-direction:column;gap:.5rem;margin-top:.4rem;}
+.cta-contacts a{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--muted);text-decoration:none;transition:color .2s;letter-spacing:.05em;}
+.cta-contacts a:hover{color:var(--cyan);}
 
 /* FOOTER */
-footer{background:var(--black);padding:2rem 5rem;display:flex;justify-content:space-between;align-items:center;border-top:1px solid rgba(255,255,255,.06);}
-.footer-logo{font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:.15em;color:rgba(255,255,255,.3);display:flex;align-items:center;gap:.5rem;}
-.footer-copy{font-size:.6rem;letter-spacing:.1em;color:rgba(255,255,255,.2);}
+footer{background:var(--bg);padding:1.5rem 5rem;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border);}
+.footer-logo{display:flex;align-items:center;gap:.7rem;font-family:'Syne',sans-serif;font-weight:800;font-size:.9rem;color:var(--dimmer);}
+.footer-copy{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.1em;color:var(--dimmer);}
 
-/* ANIMATIONS */
-@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-@keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-.reveal{opacity:0;transform:translateY(30px);transition:opacity .7s ease,transform .7s ease;}
+/* ANIM */
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease;}
 .reveal.visible{opacity:1;transform:translateY(0);}
 
 /* RESPONSIVE */
-@media(max-width:900px){
+@media(max-width:960px){
   nav{padding:1rem 1.5rem;}
-  .hero{grid-template-columns:1fr;}
-  .hero-right{min-height:360px;}
-  .hero-left{padding:4rem 2rem;}
-  .hero-cactus-wrap,.hero-stat-grid{max-width:100%;}
-  .problem,.pricing,.cta-section,.timing{grid-template-columns:1fr;padding:4rem 2rem;gap:3rem;}
-  .how{padding:4rem 2rem;}
-  .how-header{flex-direction:column;align-items:flex-start;gap:1rem;}
+  .nav-links{display:none;}
+  .hero-inner,.problem,.how-grid,.pricing,.compat-grid,.timing,.cta{grid-template-columns:1fr;gap:3rem;padding:4rem 1.5rem;}
+  .how,.benefits,.compat,.manifesto{padding:4rem 1.5rem;}
   .benefits-grid{grid-template-columns:1fr 1fr;}
-  .existing,.benefits{padding:4rem 2rem;}
-  .manifesto{padding:6rem 2rem;}
-  footer{flex-direction:column;gap:1rem;padding:2rem;}
-  .anim-steps{flex-wrap:wrap;}
+  footer{flex-direction:column;gap:1rem;padding:2rem 1.5rem;text-align:center;}
+  .anim-panel{position:static;}
 }
 </style>
 </head>
 <body>
 
-<!-- NAV -->
 <nav>
   <a href="#" class="nav-logo">
-    <svg class="cactus-svg" viewBox="0 0 24 40"><rect x="10" y="0" width="4" height="30" rx="2"/><rect x="2" y="10" width="8" height="4" rx="2"/><rect x="2" y="10" width="4" height="10" rx="2"/><rect x="14" y="15" width="8" height="4" rx="2"/><rect x="18" y="15" width="4" height="8" rx="2"/><rect x="10" y="30" width="4" height="10" rx="2"/></svg>
-    Road Less
+    <div class="logo-mark">
+      <svg viewBox="0 0 24 40"><rect x="10" y="0" width="4" height="30" rx="2"/><rect x="2" y="10" width="8" height="4" rx="2"/><rect x="2" y="10" width="4" height="10" rx="2"/><rect x="14" y="15" width="8" height="4" rx="2"/><rect x="18" y="15" width="4" height="8" rx="2"/><rect x="10" y="30" width="4" height="10" rx="2"/></svg>
+    </div>
+    ROAD LESS
   </a>
-  <a href="#contacto" class="nav-cta">Agenda tu diagnóstico →</a>
+  <ul class="nav-links">
+    <li><a href="#como-funciona">Sistema</a></li>
+    <li><a href="#precio">Pricing</a></li>
+    <li><a href="#beneficios">Beneficios</a></li>
+  </ul>
+  <a href="#contacto" class="nav-cta">[ Diagnóstico gratuito ]</a>
 </nav>
 
-<!-- HERO -->
 <section class="hero">
-  <div class="hero-left">
-    <p class="hero-tag">Tecnología de estacionamiento · Monterrey, MX</p>
-    <h1 class="hero-title">Tu plaza.<br><span class="accent">Sin fricción.</span><br>Sin costo.</h1>
-    <p class="hero-sub">Road Less instala, opera y automatiza tu estacionamiento completo. Sin inversión de tu parte. Sin tickets. Sin filas. Sin personal.</p>
-    <a href="#contacto" class="hero-btn">
-      <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      Agenda diagnóstico gratuito
-    </a>
-  </div>
-  <div class="hero-right">
-    <div class="checker"></div>
-    <div class="hero-cactus-wrap">
-      <svg viewBox="0 0 260 380" xmlns="http://www.w3.org/2000/svg">
-        <ellipse cx="130" cy="368" rx="55" ry="9" fill="rgba(0,0,0,0.18)"/>
-        <rect x="108" y="60" width="44" height="300" rx="22" fill="#2d5a3d"/>
-        <rect x="48" y="148" width="62" height="28" rx="14" fill="#2d5a3d"/>
-        <rect x="48" y="100" width="28" height="76" rx="14" fill="#2d5a3d"/>
-        <ellipse cx="62" cy="100" rx="14" ry="14" fill="#2d5a3d"/>
-        <rect x="150" y="190" width="62" height="28" rx="14" fill="#2d5a3d"/>
-        <rect x="184" y="148" width="28" height="70" rx="14" fill="#2d5a3d"/>
-        <ellipse cx="198" cy="148" rx="14" ry="14" fill="#2d5a3d"/>
-        <ellipse cx="130" cy="60" rx="22" ry="22" fill="#2d5a3d"/>
-        <rect x="122" y="80" width="8" height="240" rx="4" fill="rgba(255,255,255,0.07)"/>
-        <rect x="56" y="110" width="6" height="50" rx="3" fill="rgba(255,255,255,0.07)"/>
-        <rect x="192" y="155" width="6" height="44" rx="3" fill="rgba(255,255,255,0.07)"/>
-        <g stroke="#1a3a2a" stroke-width="2" stroke-linecap="round">
-          <line x1="108" y1="130" x2="94" y2="124"/><line x1="152" y1="130" x2="166" y2="124"/>
-          <line x1="108" y1="180" x2="94" y2="174"/><line x1="152" y1="180" x2="166" y2="174"/>
-          <line x1="108" y1="230" x2="94" y2="224"/><line x1="152" y1="230" x2="166" y2="224"/>
-          <line x1="108" y1="280" x2="94" y2="274"/><line x1="152" y1="280" x2="166" y2="274"/>
-        </g>
-        <ellipse cx="130" cy="46" rx="10" ry="10" fill="#f0ead8"/>
-        <ellipse cx="130" cy="46" rx="5" ry="5" fill="#d4c9a8"/>
-        <ellipse cx="118" cy="48" rx="7" ry="7" fill="#f0ead8"/>
-        <ellipse cx="142" cy="48" rx="7" ry="7" fill="#f0ead8"/>
-        <ellipse cx="124" cy="38" rx="7" ry="7" fill="#f0ead8"/>
-        <ellipse cx="136" cy="38" rx="7" ry="7" fill="#f0ead8"/>
-        <ellipse cx="130" cy="46" rx="6" ry="6" fill="#c0392b" opacity="0.8"/>
-        <ellipse cx="62" cy="90" rx="6" ry="6" fill="#f0ead8"/>
-        <ellipse cx="62" cy="90" rx="3" ry="3" fill="#c0392b" opacity="0.7"/>
-        <ellipse cx="198" cy="138" rx="6" ry="6" fill="#f0ead8"/>
-        <ellipse cx="198" cy="138" rx="3" ry="3" fill="#c0392b" opacity="0.7"/>
-        <ellipse cx="130" cy="362" rx="50" ry="10" fill="#2d5a3d" opacity="0.35"/>
-      </svg>
+  <div class="grid-bg"></div>
+  <div class="scanline"></div>
+  <div class="hero-inner">
+    <div>
+      <div class="hero-eyebrow"><span class="eyebrow-dot"></span>Parking Intelligence · Monterrey, MX · v2.1</div>
+      <h1 class="hero-title">TU PLAZA.<br><span class="line-accent">SIN FRICCIÓN.</span><br><span class="line-outline">SIN COSTO.</span></h1>
+      <p class="hero-sub">Road Less instala, opera y automatiza tu estacionamiento completo. Tecnología LPR de visión computacional. Sin inversión inicial. Sin tickets. Sin filas. Sin personal.</p>
+      <div class="hero-actions">
+        <a href="#contacto" class="btn-primary"><svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:currentColor"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Agenda diagnóstico</a>
+        <a href="#como-funciona" class="btn-ghost">Ver cómo funciona<svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      </div>
     </div>
-    <div class="hero-stat-grid">
-      <div class="hero-stat"><div class="hero-stat-num">$0</div><div class="hero-stat-label">Inversión inicial</div></div>
-      <div class="hero-stat"><div class="hero-stat-num">~3</div><div class="hero-stat-label">Meses recuperación</div></div>
-      <div class="hero-stat"><div class="hero-stat-num">Días</div><div class="hero-stat-label">Para estar operando</div></div>
-      <div class="hero-stat"><div class="hero-stat-num">100%</div><div class="hero-stat-label">Hands-free usuario</div></div>
+    <div class="hero-right-wrap">
+      <div class="tech-card">
+        <div class="card-header">
+          <span class="card-header-title">// LPR_SYSTEM · LIVE FEED</span>
+          <div class="card-dots"><span></span><span></span><span></span></div>
+        </div>
+        <div class="card-body">
+          <div class="lpr-visual">
+            <div class="lpr-grid"></div>
+            <div class="lpr-corner tl"></div><div class="lpr-corner tr"></div>
+            <div class="lpr-corner bl"></div><div class="lpr-corner br"></div>
+            <div class="lpr-car">🚗</div>
+            <div class="lpr-beam"></div>
+            <div class="lpr-plate">VEA-011-B</div>
+            <div class="lpr-status">■ AUTORIZADO</div>
+          </div>
+        </div>
+        <div class="stat-row">
+          <div class="stat-cell"><div class="stat-num">$0</div><div class="stat-label">Inversión</div></div>
+          <div class="stat-cell"><div class="stat-num">~3m</div><div class="stat-label">Retorno</div></div>
+          <div class="stat-cell"><div class="stat-num">Días</div><div class="stat-label">Para operar</div></div>
+          <div class="stat-cell"><div class="stat-num">24/7</div><div class="stat-label">Autónomo</div></div>
+        </div>
+      </div>
     </div>
-    <div class="hero-road"></div>
   </div>
 </section>
 
-<!-- TICKER -->
-<div class="ticker">
-  <div class="ticker-inner">
-    ESTACIONA SIN MANOS <span class="ticker-sep">·</span> SIN TICKETS <span class="ticker-sep">·</span> SIN FILAS <span class="ticker-sep">·</span> SIN INVERSIÓN INICIAL <span class="ticker-sep">·</span> TECNOLOGÍA LPR <span class="ticker-sep">·</span> COBRO AUTOMÁTICO <span class="ticker-sep">·</span> EL CLIENTE NUNCA SE DETIENE <span class="ticker-sep">·</span> ROAD LESS <span class="ticker-sep">·</span> ESTACIONA SIN MANOS <span class="ticker-sep">·</span> SIN TICKETS <span class="ticker-sep">·</span> SIN FILAS <span class="ticker-sep">·</span> SIN INVERSIÓN INICIAL <span class="ticker-sep">·</span> TECNOLOGÍA LPR <span class="ticker-sep">·</span> COBRO AUTOMÁTICO <span class="ticker-sep">·</span> EL CLIENTE NUNCA SE DETIENE <span class="ticker-sep">·</span> ROAD LESS <span class="ticker-sep">·</span>
+<div class="ticker-wrap">
+  <div class="ticker-track">
+    <span class="ticker-item"><span class="t-accent">LPR TECH</span><span class="ticker-sep">·</span>SIN TICKETS<span class="ticker-sep">·</span>SIN FILAS<span class="ticker-sep">·</span><span class="t-accent">$0 INVERSIÓN</span><span class="ticker-sep">·</span>COBRO AUTOMÁTICO<span class="ticker-sep">·</span>VISIÓN COMPUTACIONAL<span class="ticker-sep">·</span><span class="t-accent">ROAD LESS</span><span class="ticker-sep">·</span>EL CLIENTE NUNCA SE DETIENE<span class="ticker-sep">·</span>MONTERREY MX<span class="ticker-sep">·</span>SIN PERSONAL<span class="ticker-sep">·</span><span class="t-accent">HANDS-FREE</span><span class="ticker-sep">·</span></span>
+    <span class="ticker-item"><span class="t-accent">LPR TECH</span><span class="ticker-sep">·</span>SIN TICKETS<span class="ticker-sep">·</span>SIN FILAS<span class="ticker-sep">·</span><span class="t-accent">$0 INVERSIÓN</span><span class="ticker-sep">·</span>COBRO AUTOMÁTICO<span class="ticker-sep">·</span>VISIÓN COMPUTACIONAL<span class="ticker-sep">·</span><span class="t-accent">ROAD LESS</span><span class="ticker-sep">·</span>EL CLIENTE NUNCA SE DETIENE<span class="ticker-sep">·</span>MONTERREY MX<span class="ticker-sep">·</span>SIN PERSONAL<span class="ticker-sep">·</span><span class="t-accent">HANDS-FREE</span><span class="ticker-sep">·</span></span>
   </div>
 </div>
 
-<!-- PROBLEM -->
 <section class="problem">
   <div class="reveal">
-    <p class="section-tag">El problema</p>
-    <h2 class="problem-title">Hoy tu estacionamiento<br><span class="strike">pierde dinero</span><br>en filas, fricción<br>y operación manual.</h2>
-    <p class="problem-tagline">Con Road Less el cliente nunca se detiene.</p>
-    <ul class="problem-list">
-      <li class="problem-item"><span class="problem-num">01</span><p class="problem-text"><strong>Filas en entrada y salida.</strong> Cada vehículo que espera en la pluma es tiempo perdido, clientes frustrados y menos rotación de cajones.</p></li>
-      <li class="problem-item"><span class="problem-num">02</span><p class="problem-text"><strong>Fricción constante.</strong> Tickets, máquinas de cobro, errores de lectura. Tu cliente llega molesto antes de entrar a tu plaza.</p></li>
-      <li class="problem-item"><span class="problem-num">03</span><p class="problem-text"><strong>Operación manual 24/7.</strong> Personal en caseta, mantenimiento de máquinas, costos fijos que no paran de crecer.</p></li>
-    </ul>
+    <span class="section-label">El problema</span>
+    <h2 class="section-title problem-title">Hoy tu estacionamiento<br><span class="strike">pierde dinero</span><br>en <span class="hl">fricción</span> y<br>operación manual.</h2>
+    <p class="problem-sub">Con Road Less el cliente nunca se detiene.</p>
+    <div class="problem-items">
+      <div class="problem-item"><span class="p-num">01</span><div><p class="p-title">Filas en entrada y salida.</p><p class="p-text">Cada vehículo que espera en la pluma es tiempo perdido, clientes frustrados y menos rotación de cajones.</p></div></div>
+      <div class="problem-item"><span class="p-num">02</span><div><p class="p-title">Fricción constante.</p><p class="p-text">Tickets, máquinas de cobro, errores de lectura. Tu cliente llega molesto antes de entrar a tu plaza.</p></div></div>
+      <div class="problem-item"><span class="p-num">03</span><div><p class="p-title">Operación manual 24/7.</p><p class="p-text">Personal en caseta, mantenimiento de máquinas, costos fijos que no paran de crecer.</p></div></div>
+    </div>
   </div>
-  <div class="problem-right reveal">
-    <p class="problem-quote">"El estacionamiento es el primer y último contacto de tu cliente con tu plaza. Con Road Less, ese contacto es invisible — y eso lo cambia todo."</p>
-    <p class="problem-quote-sub">Road Less · Tecnología de estacionamiento · Monterrey, MX</p>
+  <div class="reveal">
+    <div class="quote-block">
+      <p class="quote-text">El estacionamiento es el primer y último contacto de tu cliente con tu plaza. Con Road Less, ese contacto es invisible — y eso lo cambia todo.</p>
+      <p class="quote-source">// Road Less · Parking Intelligence · Monterrey, MX</p>
+    </div>
   </div>
 </section>
 
-<!-- HOW IT WORKS -->
 <section class="how" id="como-funciona">
-  <div class="how-header reveal">
-    <div>
-      <p class="section-tag">¿Cómo funciona?</p>
-      <h2 class="how-title">Así de<br><span>simple.</span></h2>
+  <div class="how-grid">
+    <div class="reveal">
+      <span class="section-label">¿Cómo funciona?</span>
+      <h2 class="section-title">Así de simple.</h2>
+      <div class="steps">
+        <div class="step"><span class="step-num">01</span><div><p class="step-title">La cámara lee la placa</p><p class="step-text">Al acercarse, el sistema LPR detecta y verifica la placa automáticamente. El conductor no hace nada.</p></div></div>
+        <div class="step"><span class="step-num">02</span><div><p class="step-title">La pluma sube sola</p><p class="step-text">Verificación en milisegundos. La barrera se abre y el tiempo empieza a registrarse. Sin tickets.</p></div></div>
+        <div class="step"><span class="step-num">03</span><div><p class="step-title">Sale y paga sin parar</p><p class="step-text">Al salir, el cobro se procesa automáticamente. La pluma sube sola. El cliente nunca toca nada.</p></div></div>
+      </div>
     </div>
-    <p style="font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(26,58,42,.4);max-width:220px;text-align:right;line-height:1.7;">Tres pasos. El cliente no toca nada. Road Less hace todo.</p>
-  </div>
-
-  <div class="anim-stage reveal" id="animStage">
-    <div class="anim-road"><div class="anim-road-dash"></div></div>
-    <div class="anim-parking" id="animParking">P</div>
-    <div class="anim-gate anim-gate-entry"><div class="anim-gate-post"><div class="anim-gate-arm" id="animArmEntry"></div></div><span class="anim-gate-label">Entrada</span></div>
-    <div class="anim-gate anim-gate-exit"><div class="anim-gate-post"><div class="anim-gate-arm" id="animArmExit"></div></div><span class="anim-gate-label">Salida</span></div>
-    <div class="anim-scan-beam" id="animScanBeam"></div>
-    <div class="anim-plate-bubble" id="animPlateBubble">VEA-011-B ✓</div>
-    <canvas id="animCanvas"></canvas>
-  </div>
-
-  <div class="anim-action reveal">
-    <div class="anim-icon" id="animIcon">🚗</div>
-    <div>
-      <div class="anim-title" id="animTitle">El carrito se acerca a la entrada</div>
-      <div class="anim-sub" id="animSub">PLACA: VEA-011-B — DETECTADA POR LA CÁMARA</div>
+    <div class="anim-panel reveal">
+      <div class="panel-header">
+        <span class="panel-title">// SIMULATION · REAL-TIME</span>
+        <div class="panel-status"><div class="status-dot"></div>LIVE</div>
+      </div>
+      <div class="anim-stage" id="animStage">
+        <div class="grid-bg" style="mask-image:none;opacity:.4;"></div>
+        <div class="anim-road"><div class="anim-dashes"></div></div>
+        <div class="anim-parking-spot" id="animParking">P</div>
+        <div class="anim-gate anim-gate-entry"><div class="gate-post"><div class="gate-arm" id="animArmEntry"></div></div><span class="gate-label">Entrada</span></div>
+        <div class="anim-gate anim-gate-exit"><div class="gate-post"><div class="gate-arm" id="animArmExit"></div></div><span class="gate-label">Salida</span></div>
+        <div class="scan-beam" id="animScanBeam"></div>
+        <div class="plate-tag" id="animPlateBubble">VEA-011-B ✓</div>
+        <canvas id="animCanvas"></canvas>
+      </div>
+      <div class="action-bar">
+        <div class="action-icon" id="animIcon">🚗</div>
+        <div><div class="action-title" id="animTitle">El auto se acerca a la entrada</div><div class="action-sub" id="animSub">// PLACA: VEA-011-B — DETECTADA</div></div>
+      </div>
+      <div class="step-pills">
+        <div class="step-pill" id="as0">01 · Llega</div>
+        <div class="step-pill" id="as1">02 · Estaciona</div>
+        <div class="step-pill" id="as2">03 · Sale</div>
+      </div>
     </div>
-  </div>
-
-  <div class="anim-steps">
-    <div class="anim-step" id="as0">🚗 &nbsp;Llega</div>
-    <div class="anim-step" id="as1">🅿️ &nbsp;Se estaciona</div>
-    <div class="anim-step" id="as2">👋 &nbsp;Sale sin parar</div>
   </div>
 </section>
 
-<!-- PRICING -->
 <section class="pricing" id="precio">
   <div class="reveal">
-    <p class="section-tag">¿Cuánto te cuesta implementarlo?</p>
-    <div class="price-big">$0</div>
-    <p class="price-label">MXN de inversión inicial para tu estacionamiento</p>
-    <p class="price-desc">Nosotros instalamos y pagamos todo el equipo. Operamos el estacionamiento hasta recuperar la inversión — aproximadamente 3 meses. Después de eso, el equipo es completamente tuyo y el estacionamiento queda automatizado.</p>
+    <span class="section-label">¿Cuánto te cuesta?</span>
+    <div class="price-display"><span class="price-currency">MXN</span><span class="price-num">$0</span></div>
+    <p class="price-tag">// inversión inicial para tu estacionamiento</p>
+    <p class="price-desc">Nosotros instalamos y pagamos todo el equipo. Operamos hasta recuperar la inversión (~3 meses). Después el equipo es tuyo.</p>
     <div class="timeline">
-      <div class="timeline-item"><div class="timeline-dot">1</div><div><p class="timeline-label">Día 1 – 3</p><p class="timeline-text">Diagnóstico técnico gratuito e instalación del equipo Road Less en tus accesos. Sin costo para ti.</p></div></div>
-      <div class="timeline-item"><div class="timeline-dot">2</div><div><p class="timeline-label">Mes 1 – 3</p><p class="timeline-text">Operamos el estacionamiento y recuperamos nuestra inversión en equipo. Tú solo ves cómo fluye.</p></div></div>
-      <div class="timeline-item"><div class="timeline-dot">3</div><div><p class="timeline-label">Mes 4 en adelante</p><p class="timeline-text">El equipo es tuyo. Solo cobramos un pequeño fee de 10% + $1 MXN por transacción — lo paga el usuario, no tú.</p></div></div>
+      <div class="tl-item"><div class="tl-num">1</div><div><p class="tl-phase">Día 1 – 3</p><p class="tl-text">Diagnóstico técnico gratuito e instalación del equipo Road Less en tus accesos.</p></div></div>
+      <div class="tl-item"><div class="tl-num">2</div><div><p class="tl-phase">Mes 1 – 3</p><p class="tl-text">Operamos el estacionamiento y recuperamos la inversión en equipo. Tú solo ves cómo fluye.</p></div></div>
+      <div class="tl-item"><div class="tl-num">3</div><div><p class="tl-phase">Mes 4 en adelante</p><p class="tl-text">El equipo es tuyo. Solo cobramos 10% + $1 MXN por transacción — lo paga el usuario.</p></div></div>
     </div>
   </div>
-  <div class="price-right reveal">
-    <p class="price-right-title">Ejemplo de cobro real</p>
-    <div class="price-row"><span>Tarifa por hora</span><span>$30 MXN</span></div>
-    <div class="price-row"><span>Tiempo en estacionamiento</span><span>2 horas</span></div>
-    <div class="price-row"><span>Estacionamiento</span><span>$60 MXN</span></div>
-    <div class="price-row"><span>Fee Road Less (10% + $1 MXN)</span><span>$7 MXN</span></div>
-    <div class="price-row total"><span>Total a pagar</span><span>$67 MXN</span></div>
-    <p class="price-note">El fee lo paga el cliente. Tú recibes el 100% de tu tarifa.</p>
-  </div>
-</section>
-
-<!-- EXISTING EQUIPMENT -->
-<section class="existing" id="compatibilidad">
-  <div class="existing-header reveal">
-    <p class="section-tag">¿Ya tienes tu propio equipo?</p>
-    <h2 class="existing-title">Road Less se adapta<br><em>a lo que ya tienes.</em></h2>
-  </div>
-  <div class="exist-list">
-    <div class="exist-item reveal">
-      <div class="exist-icon-box">🔌</div>
-      <div><h3 class="exist-name">Compatibilidad total</h3><p class="exist-text">No necesitas desechar tu inversión actual. Road Less se integra con la mayoría de plumas y barreras del mercado mediante nuestro software.</p></div>
-    </div>
-    <div class="exist-item reveal" style="transition-delay:.15s">
-      <div class="exist-icon-box">📸</div>
-      <div><h3 class="exist-name">Modernización modular</h3><p class="exist-text">Podemos utilizar tus cámaras existentes o instalar las nuestras para complementar el sistema de lectura de placas (LPR).</p></div>
-    </div>
-    <div class="exist-item reveal" style="transition-delay:.3s">
-      <div class="exist-icon-box">⚡</div>
-      <div><h3 class="exist-name">Transición fluida</h3><p class="exist-text">Implementamos nuestra tecnología sobre tu infraestructura actual para que el estacionamiento pase a ser "fricción cero" en cuestión de días.</p></div>
+  <div class="reveal">
+    <div class="receipt">
+      <div class="receipt-header"><span>// EJEMPLO DE COBRO REAL</span><span>TXN-2026-0412</span></div>
+      <div class="receipt-body">
+        <div class="receipt-row"><span>Tarifa por hora</span><span>$30 MXN</span></div>
+        <div class="receipt-row"><span>Tiempo en estacionamiento</span><span>2 horas</span></div>
+        <div class="receipt-row"><span>Subtotal estacionamiento</span><span>$60 MXN</span></div>
+        <div class="receipt-row"><span>Fee Road Less (10% + $1)</span><span>$7 MXN</span></div>
+      </div>
+      <div class="receipt-total"><span class="receipt-total-label">Total a pagar</span><span class="receipt-total-num">$67 MXN</span></div>
+      <div class="receipt-note">El fee lo paga el cliente · Tú recibes el 100% de tu tarifa</div>
     </div>
   </div>
 </section>
 
-<!-- BENEFITS -->
+<section class="compat" id="compatibilidad">
+  <div class="reveal">
+    <span class="section-label">¿Ya tienes equipo?</span>
+    <h2 class="section-title">Road Less se adapta<br>a lo que ya tienes.</h2>
+  </div>
+  <div class="compat-grid">
+    <div class="compat-items">
+      <div class="compat-item reveal"><div class="compat-icon">🔌</div><div><p class="compat-name">Compatibilidad total</p><p class="compat-text">Integración con la mayoría de plumas y barreras del mercado mediante nuestro software. Sin tirar tu inversión actual.</p></div></div>
+      <div class="compat-item reveal" style="transition-delay:.1s"><div class="compat-icon">📸</div><div><p class="compat-name">Modernización modular</p><p class="compat-text">Utilizamos tus cámaras existentes o instalamos las nuestras para el sistema de lectura de placas LPR.</p></div></div>
+      <div class="compat-item reveal" style="transition-delay:.2s"><div class="compat-icon">⚡</div><div><p class="compat-name">Transición en días</p><p class="compat-text">Implementamos sobre tu infraestructura actual. El estacionamiento pasa a ser fricción cero en cuestión de días.</p></div></div>
+    </div>
+    <div class="diagram reveal">
+      <p class="diagram-title">// ARCHITECTURE · OVERVIEW</p>
+      <div class="diagram-nodes">
+        <div class="diag-node"><div class="diag-node-icon">📷</div><div class="diag-node-name">Cámara LPR</div><div class="diag-node-sub">HD · IR · 24/7</div></div>
+        <div class="diag-node"><div class="diag-node-icon">🧠</div><div class="diag-node-name">IA Engine</div><div class="diag-node-sub">Vision · Cloud</div></div>
+        <div class="diag-node"><div class="diag-node-icon">🚧</div><div class="diag-node-name">Pluma</div><div class="diag-node-sub">Auto · Smart</div></div>
+        <div class="diag-arrow">↓ Integración con tu equipo existente ↓</div>
+        <div class="diag-node"><div class="diag-node-icon">💳</div><div class="diag-node-name">Cobro Auto</div><div class="diag-node-sub">Sin caja · Sin ticket</div></div>
+        <div class="diag-node"><div class="diag-node-icon">📊</div><div class="diag-node-name">Dashboard</div><div class="diag-node-sub">Real-time · Reports</div></div>
+        <div class="diag-node"><div class="diag-node-icon">🔔</div><div class="diag-node-name">Alertas</div><div class="diag-node-sub">SMS · WhatsApp</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section class="benefits" id="beneficios">
-  <div class="benefits-header reveal">
-    <p class="section-tag">Beneficios</p>
-    <h2 class="benefits-title">Lo que ganas<br><span>con Road Less.</span></h2>
+  <div class="reveal">
+    <span class="section-label">Beneficios</span>
+    <h2 class="section-title">Lo que ganas<br>con Road Less.</h2>
   </div>
   <div class="benefits-grid">
-    <div class="benefit-card reveal"><div class="benefit-icon-box">🤖</div><h3 class="benefit-title">Tecnología avanzada</h3><p class="benefit-text">Inteligencia artificial y visión computacional de última generación para lectura de placas LPR con alta precisión en cualquier condición.</p></div>
-    <div class="benefit-card reveal" style="transition-delay:.08s"><div class="benefit-icon-box">⚡</div><h3 class="benefit-title">Eficiencia pura</h3><p class="benefit-text">Elimina filas y tiempos de espera. Más rotación de cajones, más ingresos para ti.</p></div>
-    <div class="benefit-card reveal" style="transition-delay:.16s"><div class="benefit-icon-box">👤</div><h3 class="benefit-title">Sin personal operando</h3><p class="benefit-text">Reduce costos de nómina. El sistema opera 24/7 de forma completamente autónoma.</p></div>
-    <div class="benefit-card reveal" style="transition-delay:.24s"><div class="benefit-icon-box">⭐</div><h3 class="benefit-title">Diferenciación competitiva</h3><p class="benefit-text">Sé el estacionamiento preferido. Los clientes regresarán por la experiencia sin fricción.</p></div>
-    <div class="benefit-card reveal" style="transition-delay:.32s"><div class="benefit-icon-box">🧠</div><h3 class="benefit-title">Inteligencia artificial</h3><p class="benefit-text">El sistema aprende y mejora con cada vehículo. Precisión superior en cualquier condición.</p></div>
-    <div class="benefit-card reveal" style="transition-delay:.4s"><div class="benefit-icon-box">📈</div><h3 class="benefit-title">Incremento en ventas</h3><p class="benefit-text">Una experiencia fluida impulsa más visitas y mayor tiempo de permanencia en tu plaza.</p></div>
+    <div class="benefit reveal"><div class="benefit-num">// 01</div><div class="benefit-icon">🤖</div><h3 class="benefit-title">IA de última gen</h3><p class="benefit-text">Visión computacional con alta precisión para lectura de placas en cualquier condición.</p></div>
+    <div class="benefit reveal" style="transition-delay:.07s"><div class="benefit-num">// 02</div><div class="benefit-icon">⚡</div><h3 class="benefit-title">Eficiencia pura</h3><p class="benefit-text">Elimina filas y tiempos de espera. Más rotación de cajones, más ingresos para ti.</p></div>
+    <div class="benefit reveal" style="transition-delay:.14s"><div class="benefit-num">// 03</div><div class="benefit-icon">👤</div><h3 class="benefit-title">Sin personal</h3><p class="benefit-text">Reduce costos de nómina. El sistema opera 24/7 de forma completamente autónoma.</p></div>
+    <div class="benefit reveal" style="transition-delay:.21s"><div class="benefit-num">// 04</div><div class="benefit-icon">⭐</div><h3 class="benefit-title">Diferenciación</h3><p class="benefit-text">Sé el estacionamiento preferido. Los clientes regresan por la experiencia sin fricción.</p></div>
+    <div class="benefit reveal" style="transition-delay:.28s"><div class="benefit-num">// 05</div><div class="benefit-icon">🧠</div><h3 class="benefit-title">Aprende solo</h3><p class="benefit-text">El sistema mejora con cada vehículo. Precisión superior sin intervención.</p></div>
+    <div class="benefit reveal" style="transition-delay:.35s"><div class="benefit-num">// 06</div><div class="benefit-icon">📈</div><h3 class="benefit-title">+Ventas</h3><p class="benefit-text">Una experiencia fluida impulsa más visitas y mayor permanencia en tu plaza.</p></div>
   </div>
 </section>
 
-<!-- TIMING -->
 <section class="timing">
-  <div class="timing-left">
-    <p class="section-tag" style="color:rgba(240,234,216,.4);">El momento es ahora</p>
-    <h2 class="timing-title reveal">Las nuevas<br>generaciones<br>quieren <span>todo en<br>un clic,</span><br>esfuerzo mínimo.</h2>
-    <div class="timing-tags reveal">
+  <div class="reveal">
+    <span class="section-label">El momento es ahora</span>
+    <h2 class="section-title timing-title">Las nuevas<br>generaciones<br>quieren <span class="glow">todo en<br>un clic.</span></h2>
+    <div class="timing-tags">
       <span class="timing-tag">Construcción vertical</span>
       <span class="timing-tag">Ciudades inteligentes</span>
       <span class="timing-tag">Auto + nube</span>
     </div>
   </div>
-  <div class="timing-right">
-    <div class="timing-stat reveal">
-      <div class="timing-stat-num">1 de cada 4</div>
-      <p class="timing-stat-text">Para finales de 2026, se espera que 1 de cada 4 pagos de estacionamiento en ciudades inteligentes sea totalmente automático gracias a la integración del automóvil con la nube.</p>
-      <p class="timing-sub">Proyección · Ciudades inteligentes · 2026</p>
+  <div class="reveal">
+    <div class="big-stat">
+      <div class="big-stat-num">1 de cada 4</div>
+      <p class="big-stat-text">Para finales de 2026, se espera que 1 de cada 4 pagos de estacionamiento en ciudades inteligentes sea totalmente automático gracias a la integración del automóvil con la nube.</p>
+      <p class="big-stat-source">// Proyección · Ciudades inteligentes · 2026</p>
     </div>
   </div>
 </section>
 
-<!-- MANIFESTO -->
 <section class="manifesto">
-  <p class="manifesto-text reveal">"Para los que hacen.<br>Para los que recorren<br><span class="highlight">el camino menos transitado.</span><br>Mira adentro.<br>Ahí es donde lo encontrarás."</p>
-  <p class="manifesto-sub reveal">Road Less · Monterrey, N.L. · 2026</p>
+  <p class="manifesto-text reveal"><span class="dim">Para los que hacen.<br>Para los que recorren</span><br><span class="accent-line">el camino menos transitado.</span><br><span class="dim">Mira adentro.<br>Ahí es donde lo encontrarás.</span></p>
+  <p class="manifesto-sub reveal">// Road Less · Monterrey, N.L. · 2026</p>
 </section>
 
-<!-- CTA -->
-<section class="cta-section" id="contacto">
-  <div class="cta-left reveal">
-    <p class="section-tag" style="color:rgba(240,234,216,.4);">Siguiente paso</p>
-    <h2 class="cta-title">Agenda tu<br><em>diagnóstico</em><br>técnico<br>sin costo.</h2>
+<section class="cta" id="contacto">
+  <div class="reveal">
+    <span class="section-label">Siguiente paso</span>
+    <h2 class="section-title cta-title">Agenda tu<br><em>diagnóstico</em><br>técnico<br>sin costo.</h2>
     <p class="cta-sub">En menos de 30 minutos evaluamos tu estacionamiento y te mostramos exactamente cómo Road Less funciona en tu plaza. Sin compromisos, sin costo.</p>
   </div>
   <div class="cta-right reveal">
-    <a href="https://wa.me/524281312784?text=Hola%2C%20me%20interesa%20agendar%20un%20diagn%C3%B3stico%20t%C3%A9cnico%20gratuito%20para%20mi%20estacionamiento%20con%20Road%20Less." class="cta-btn-wa" target="_blank">
+    <a href="https://wa.me/524281312784?text=Hola%2C%20me%20interesa%20agendar%20un%20diagn%C3%B3stico%20t%C3%A9cnico%20gratuito%20para%20mi%20estacionamiento%20con%20Road%20Less." class="btn-wa" target="_blank">
       <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
       Hablar con Oscar → WhatsApp
     </a>
-    <p class="cta-note">Respuesta en menos de 2 horas · Diagnóstico sin costo</p>
-    <div class="cta-contact-alt">
+    <p class="cta-note">// Respuesta en menos de 2 horas · Diagnóstico sin costo</p>
+    <div class="cta-contacts">
       <a href="mailto:osuc262@gmail.com">✉ osuc262@gmail.com</a>
       <a href="tel:+524281312784">📞 428 131 2784</a>
     </div>
   </div>
 </section>
 
-<!-- FOOTER -->
 <footer>
-  <span class="footer-logo">
-    <svg style="width:14px;height:22px;fill:rgba(255,255,255,.3)" viewBox="0 0 24 40"><rect x="10" y="0" width="4" height="30" rx="2"/><rect x="2" y="10" width="8" height="4" rx="2"/><rect x="2" y="10" width="4" height="10" rx="2"/><rect x="14" y="15" width="8" height="4" rx="2"/><rect x="18" y="15" width="4" height="8" rx="2"/><rect x="10" y="30" width="4" height="10" rx="2"/></svg>
-    Road Less
-  </span>
-  <span class="footer-copy">© 2026 Road Less · Monterrey, N.L. · Estaciona y paga sin manos</span>
+  <div class="footer-logo">
+    <div class="logo-mark" style="width:24px;height:24px;border-radius:6px;">
+      <svg viewBox="0 0 24 40" style="width:12px;height:12px;fill:var(--cyan)"><rect x="10" y="0" width="4" height="30" rx="2"/><rect x="2" y="10" width="8" height="4" rx="2"/><rect x="2" y="10" width="4" height="10" rx="2"/><rect x="14" y="15" width="8" height="4" rx="2"/><rect x="18" y="15" width="4" height="8" rx="2"/><rect x="10" y="30" width="4" height="10" rx="2"/></svg>
+    </div>
+    ROAD LESS
+  </div>
+  <span class="footer-copy">© 2026 Road Less · Monterrey, N.L. · Parking Intelligence</span>
 </footer>
 
 <script>
-/* SCROLL REVEAL */
 const revEls=document.querySelectorAll('.reveal');
-const revObs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');}),{threshold:.1});
+const revObs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');}),{threshold:.08});
 revEls.forEach(r=>revObs.observe(r));
 
-/* HELPERS */
 const lerp=(a,b,t)=>a+(b-a)*t;
 const eio=t=>t<.5?2*t*t:-1+(4-2*t)*t;
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 
-/* CAR DRAWING */
 function drawCar(ctx,x,y,facing){
   ctx.save();ctx.translate(x,y);ctx.scale(facing,1);
-  const bw=50,bh=26,br=7;
-  ctx.save();
-  ctx.shadowColor='rgba(0,0,0,.28)';ctx.shadowBlur=12;ctx.shadowOffsetY=5;
-  ctx.beginPath();ctx.roundRect(-bw/2,-bh/2,bw,bh,br);ctx.fillStyle='#2d5a3d';ctx.fill();
-  ctx.restore();
-  ctx.beginPath();ctx.roundRect(-bw/2,-bh/2,bw,bh,br);ctx.fillStyle='#2d5a3d';ctx.fill();
-  ctx.beginPath();ctx.roundRect(-14,-bh/2-11,26,14,4);ctx.fillStyle='#1a3a2a';ctx.fill();
-  ctx.fillStyle='rgba(168,216,176,.88)';
-  ctx.beginPath();ctx.roundRect(-13,-bh/2-10,11,11,2);ctx.fill();
-  ctx.beginPath();ctx.roundRect(1,-bh/2-10,11,11,2);ctx.fill();
+  const bw=50,bh=24,br=6;
+  ctx.shadowColor='rgba(0,210,255,0.5)';ctx.shadowBlur=18;
+  ctx.beginPath();ctx.roundRect(-bw/2,-bh/2,bw,bh,br);ctx.fillStyle='#0a2840';ctx.fill();
+  ctx.shadowBlur=0;
+  ctx.strokeStyle='rgba(0,210,255,0.6)';ctx.lineWidth=1;
+  ctx.beginPath();ctx.roundRect(-bw/2,-bh/2,bw,bh,br);ctx.stroke();
+  ctx.beginPath();ctx.roundRect(-13,-bh/2-10,24,13,3);ctx.fillStyle='#071520';ctx.fill();
+  ctx.strokeStyle='rgba(0,210,255,0.3)';ctx.lineWidth=0.5;ctx.stroke();
+  ctx.fillStyle='rgba(0,210,255,0.7)';
+  ctx.beginPath();ctx.roundRect(-12,-bh/2-9,10,10,2);ctx.fill();
+  ctx.beginPath();ctx.roundRect(0,-bh/2-9,10,10,2);ctx.fill();
   [[-bw/2+9,bh/2-2],[bw/2-9,bh/2-2]].forEach(([wx,wy])=>{
-    ctx.beginPath();ctx.arc(wx,wy,7,0,Math.PI*2);ctx.fillStyle='#111';ctx.fill();
-    ctx.beginPath();ctx.arc(wx,wy,3.2,0,Math.PI*2);ctx.fillStyle='#666';ctx.fill();
+    ctx.beginPath();ctx.arc(wx,wy,7,0,Math.PI*2);ctx.fillStyle='#050e16';ctx.fill();
+    ctx.strokeStyle='rgba(0,210,255,0.4)';ctx.lineWidth=1;ctx.stroke();
+    ctx.beginPath();ctx.arc(wx,wy,2.5,0,Math.PI*2);ctx.fillStyle='rgba(0,210,255,0.5)';ctx.fill();
   });
-  ctx.fillStyle='rgba(240,234,216,.95)';
-  ctx.beginPath();ctx.roundRect(bw/2-3,-6,4,6,1);ctx.fill();
-  ctx.beginPath();ctx.roundRect(bw/2-3,0,4,6,1);ctx.fill();
-  ctx.fillStyle='rgba(192,57,43,.9)';
-  ctx.beginPath();ctx.roundRect(-bw/2,-6,4,6,1);ctx.fill();
-  ctx.beginPath();ctx.roundRect(-bw/2,0,4,6,1);ctx.fill();
-  ctx.fillStyle='#d4c9a8';
-  ctx.beginPath();ctx.roundRect(-15,bh/2-4,30,9,2);ctx.fill();
-  ctx.fillStyle='#1a3a2a';
-  ctx.font='bold 5.5px monospace';ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.fillStyle='rgba(0,210,255,0.9)';
+  ctx.beginPath();ctx.roundRect(bw/2-3,-5,3.5,5,1);ctx.fill();
+  ctx.beginPath();ctx.roundRect(bw/2-3,1,3.5,5,1);ctx.fill();
+  ctx.fillStyle='rgba(255,59,92,0.9)';
+  ctx.beginPath();ctx.roundRect(-bw/2,-5,3.5,5,1);ctx.fill();
+  ctx.beginPath();ctx.roundRect(-bw/2,1,3.5,5,1);ctx.fill();
+  ctx.fillStyle='rgba(0,210,255,0.15)';
+  ctx.beginPath();ctx.roundRect(-14,bh/2-4,28,8,2);ctx.fill();
+  ctx.strokeStyle='rgba(0,210,255,0.4)';ctx.lineWidth=0.5;ctx.stroke();
+  ctx.fillStyle='rgba(0,210,255,0.8)';
+  ctx.font='bold 5px JetBrains Mono,monospace';
+  ctx.textAlign='center';ctx.textBaseline='middle';
   ctx.fillText('VEA-011-B',0,bh/2+0.5);
   ctx.restore();
 }
 
-/* HOW SECTION ANIMATION */
 (function(){
   const stage=document.getElementById('animStage');
   if(!stage)return;
@@ -517,129 +572,36 @@ function drawCar(ctx,x,y,facing){
   const aTitle=document.getElementById('animTitle');
   const aSub=document.getElementById('animSub');
   const stepEls=[0,1,2].map(i=>document.getElementById('as'+i));
-
   function resize(){canvas.width=stage.offsetWidth;canvas.height=stage.offsetHeight;}
-  resize();
-  window.addEventListener('resize',resize);
-
-  const W=()=>canvas.width;
-  const H=()=>canvas.height;
-
-  function setA(icon,title,sub){aIcon.textContent=icon;aTitle.textContent=title;aSub.textContent=sub;}
-  function setStep(idx){
-    stepEls.forEach((el,i)=>{
-      el.classList.remove('active','done');
-      if(i<idx)el.classList.add('done');
-      else if(i===idx)el.classList.add('active');
-    });
-  }
-
-  const PH={APPROACH:0,SCAN:1,ENTER:2,TO_PARK:3,PARKED:4,LEAVE:5,TO_EXIT:6,EXIT:7};
-  const DUR={APPROACH:2.5,SCAN:3.2,ENTER:1.0,TO_PARK:1.4,PARKED:4.5,LEAVE:1.2,TO_EXIT:1.6,EXIT:2.2};
-  let ph=PH.APPROACH,pt=0,last=null,carX=0,carY=0,carF=1;
-
-  function xp(){
-    const w=W();
-    return{offL:-65,entry:70,entryPast:125,center:w/2,exitPast:w-125,exit:w-70,offR:w+65};
-  }
-
+  resize();window.addEventListener('resize',resize);
+  const W=()=>canvas.width,H=()=>canvas.height;
+  function setA(i,t,s){aIcon.textContent=i;aTitle.textContent=t;aSub.textContent=s;}
+  function setStep(idx){stepEls.forEach((el,i)=>{el.classList.remove('active','done');if(i<idx)el.classList.add('done');else if(i===idx)el.classList.add('active');});}
+  const PH={A:0,S:1,E:2,P:3,K:4,L:5,X:6,O:7};
+  const DUR={A:2.5,S:3.2,E:1.0,P:1.4,K:4.5,L:1.2,X:1.6,O:2.2};
+  let ph=0,pt=0,last=null;
+  function xp(){const w=W();return{offL:-65,entry:60,entryPast:115,center:w/2,exitPast:w-115,exit:w-60,offR:w+65};}
   function tick(ts){
     if(!last)last=ts;
     const dt=(ts-last)/1000;last=ts;pt+=dt;
     const cx=xp(),cy=H()/2;
-
+    let carX=0,carY=cy,carF=1;
     switch(ph){
-      case PH.APPROACH:{
-        const p=eio(clamp(pt/DUR.APPROACH,0,1));
-        carX=lerp(cx.offL,cx.entry-4,p);carY=cy;carF=1;
-        armEntry.classList.remove('open');armExit.classList.remove('open');
-        scanBeam.classList.remove('show');plateBubble.classList.remove('show');
-        parking.classList.remove('occupied');parking.textContent='P';
-        setStep(0);
-        setA('🚗','El carrito se acerca a la entrada','PLACA: VEA-011-B — DETECTADA POR LA CÁMARA');
-        if(pt>=DUR.APPROACH)next();
-        break;
-      }
-      case PH.SCAN:{
-        carX=cx.entry-4;carY=cy;carF=1;
-        const t=pt/DUR.SCAN;setStep(0);
-        if(t<.25){
-          scanBeam.classList.add('show');
-          setA('📷','La cámara lee la placa al instante','SIN QUE EL CONDUCTOR HAGA NADA');
-        }else if(t<.55){
-          scanBeam.classList.remove('show');plateBubble.classList.add('show');
-          setA('✅','VEA-011-B verificada','ACCESO AUTORIZADO AUTOMÁTICAMENTE');
-        }else{
-          plateBubble.classList.remove('show');armEntry.classList.add('open');
-          setA('🔓','La pluma sube sola','EL CARRITO PUEDE ENTRAR SIN DETENERSE');
-        }
-        if(pt>=DUR.SCAN)next();
-        break;
-      }
-      case PH.ENTER:{
-        const p=eio(clamp(pt/DUR.ENTER,0,1));
-        carX=lerp(cx.entry-4,cx.entryPast,p);carY=cy;carF=1;
-        setA('➡️','Entra sin parar ni tocar nada','LA PLUMA BAJA SOLA DETRÁS DE ÉL');
-        if(pt>=DUR.ENTER){armEntry.classList.remove('open');next();}
-        break;
-      }
-      case PH.TO_PARK:{
-        const p=eio(clamp(pt/DUR.TO_PARK,0,1));
-        carX=lerp(cx.entryPast,cx.center,p);carY=cy;carF=1;
-        parking.classList.add('occupied');parking.textContent='';
-        setStep(1);setA('🅿️','Buscando su cajón','EL SISTEMA LO GUÍA AUTOMÁTICAMENTE');
-        if(pt>=DUR.TO_PARK)next();
-        break;
-      }
-      case PH.PARKED:{
-        carX=cx.center;carY=cy+Math.sin(pt*2.8)*2.5;carF=-1;
-        parking.classList.add('occupied');setStep(1);
-        const r=pt/DUR.PARKED;
-        if(r<.30)setA('⏱️','Tiempo registrado automáticamente','EL USUARIO DISFRUTA SU VISITA');
-        else if(r<.62)setA('☕','Sin pensar en tickets ni cajas','ROAD LESS LLEVA LA CUENTA SOLO');
-        else setA('💳','Cobro listo para cuando salga','SE CARGARÁ A SU TARJETA AL SALIR');
-        if(pt>=DUR.PARKED)next();
-        break;
-      }
-      case PH.LEAVE:{
-        const p=eio(clamp(pt/DUR.LEAVE,0,1));
-        carX=lerp(cx.center,cx.exitPast,p);carY=cy;carF=1;
-        parking.classList.remove('occupied');parking.textContent='P';
-        setStep(2);setA('💳','Cobro automático — $67 MXN','CARGADO A SU TARJETA. SIN PARAR, SIN CAJAS');
-        if(pt>=DUR.LEAVE)next();
-        break;
-      }
-      case PH.TO_EXIT:{
-        const p=eio(clamp(pt/DUR.TO_EXIT,0,1));
-        carX=lerp(cx.exitPast,cx.exit-4,p);carY=cy;carF=1;
-        armExit.classList.add('open');
-        setStep(2);setA('🔓','La pluma de salida sube sola','SIN FILAS, SIN PAGAR EN CAJA');
-        if(pt>=DUR.TO_EXIT)next();
-        break;
-      }
-      case PH.EXIT:{
-        const p=eio(clamp(pt/DUR.EXIT,0,1));
-        carX=lerp(cx.exit-4,cx.offR,p);carY=cy;carF=1;
-        if(p>.45)armExit.classList.remove('open');
-        setStep(2);setA('👋','¡Salió sin parar ni pagar en caja!','ASÍ FUNCIONA ROAD LESS — SIEMPRE');
-        if(pt>=DUR.EXIT)reset();
-        break;
-      }
+      case PH.A:{const p=eio(clamp(pt/DUR.A,0,1));carX=lerp(cx.offL,cx.entry-4,p);armEntry.classList.remove('open');armExit.classList.remove('open');scanBeam.classList.remove('show');plateBubble.classList.remove('show');parking.classList.remove('occupied');parking.textContent='P';setStep(0);setA('🚗','El auto se acerca a la entrada','// PLACA: VEA-011-B — DETECTADA');if(pt>=DUR.A)next();break;}
+      case PH.S:{carX=cx.entry-4;const t=pt/DUR.S;setStep(0);if(t<.25){scanBeam.classList.add('show');setA('📷','Cámara lee la placa al instante','// SIN QUE EL CONDUCTOR HAGA NADA');}else if(t<.55){scanBeam.classList.remove('show');plateBubble.classList.add('show');setA('✅','VEA-011-B verificada','// ACCESO AUTORIZADO AUTOMÁTICAMENTE');}else{plateBubble.classList.remove('show');armEntry.classList.add('open');setA('🔓','La pluma sube sola','// EL AUTO ENTRA SIN DETENERSE');}if(pt>=DUR.S)next();break;}
+      case PH.E:{const p=eio(clamp(pt/DUR.E,0,1));carX=lerp(cx.entry-4,cx.entryPast,p);setA('➡️','Entra sin parar ni tocar nada','// PLUMA BAJA SOLA DETRÁS');if(pt>=DUR.E){armEntry.classList.remove('open');next();}break;}
+      case PH.P:{const p=eio(clamp(pt/DUR.P,0,1));carX=lerp(cx.entryPast,cx.center,p);parking.classList.add('occupied');parking.textContent='';setStep(1);setA('🅿️','Buscando cajón','// SISTEMA LO GUÍA AUTOMÁTICAMENTE');if(pt>=DUR.P)next();break;}
+      case PH.K:{carX=cx.center;carY=cy+Math.sin(pt*2.8)*2;carF=-1;parking.classList.add('occupied');setStep(1);const r=pt/DUR.K;if(r<.3)setA('⏱️','Tiempo registrado automáticamente','// EL USUARIO DISFRUTA SU VISITA');else if(r<.62)setA('☕','Sin pensar en tickets ni cajas','// ROAD LESS LLEVA LA CUENTA');else setA('💳','Cobro listo para cuando salga','// SE CARGARÁ A SU TARJETA');if(pt>=DUR.K)next();break;}
+      case PH.L:{const p=eio(clamp(pt/DUR.L,0,1));carX=lerp(cx.center,cx.exitPast,p);parking.classList.remove('occupied');parking.textContent='P';setStep(2);setA('💳','Cobro automático — $67 MXN','// CARGADO A SU TARJETA. SIN CAJAS');if(pt>=DUR.L)next();break;}
+      case PH.X:{const p=eio(clamp(pt/DUR.X,0,1));carX=lerp(cx.exitPast,cx.exit-4,p);armExit.classList.add('open');setStep(2);setA('🔓','Pluma de salida sube sola','// SIN FILAS, SIN PAGAR EN CAJA');if(pt>=DUR.X)next();break;}
+      case PH.O:{const p=eio(clamp(pt/DUR.O,0,1));carX=lerp(cx.exit-4,cx.offR,p);if(p>.45)armExit.classList.remove('open');setStep(2);setA('👋','¡Salió sin parar ni pagar!','// ASÍ FUNCIONA ROAD LESS — SIEMPRE');if(pt>=DUR.O)reset();break;}
     }
-
     ctx.clearRect(0,0,W(),H());
     drawCar(ctx,carX,carY,carF);
     requestAnimationFrame(tick);
   }
-
   function next(){ph++;pt=0;}
-  function reset(){
-    ph=PH.APPROACH;pt=0;last=null;
-    armEntry.classList.remove('open');armExit.classList.remove('open');
-    scanBeam.classList.remove('show');plateBubble.classList.remove('show');
-    parking.classList.remove('occupied');parking.textContent='P';
-  }
-
+  function reset(){ph=0;pt=0;last=null;armEntry.classList.remove('open');armExit.classList.remove('open');scanBeam.classList.remove('show');plateBubble.classList.remove('show');parking.classList.remove('occupied');parking.textContent='P';}
   requestAnimationFrame(tick);
 })();
 </script>
