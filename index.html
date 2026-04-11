@@ -4,643 +4,949 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Road Less — Estaciona y paga sin manos</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&display=swap" rel="stylesheet">
 <style>
-:root{--green:#1a3a2a;--green-mid:#2d5a3d;--green-light:#4a7c5f;--cream:#f0ead8;--sand:#d4c9a8;--black:#0e0e0e;--white:#fafaf7;--red:#c0392b;}
+@font-face{font-family:'Geist';src:url('https://cdn.jsdelivr.net/npm/geist@1.3.0/dist/fonts/geist-sans/Geist-Black.woff2') format('woff2');font-weight:900;font-style:normal;font-display:swap;}
+@font-face{font-family:'Geist';src:url('https://cdn.jsdelivr.net/npm/geist@1.3.0/dist/fonts/geist-sans/Geist-Bold.woff2') format('woff2');font-weight:700;font-style:normal;font-display:swap;}
+:root{--black:#0a0a0a;--white:#f0efeb;--accent:#c8e85a;--green:#2d5a27;--dark:#141414;--max:1100px;--pad:2rem;}
 *{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;}
-body{background:var(--cream);color:var(--black);font-family:'DM Mono',monospace;overflow-x:hidden;}
+body{background:var(--black);color:var(--white);font-family:'Inter',sans-serif;overflow-x:hidden;font-size:15px;line-height:1.6;}
+::-webkit-scrollbar{width:2px;}::-webkit-scrollbar-thumb{background:var(--accent);}
+#globalBg{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;}
+body{isolation:isolate;}
+nav,section,.manifesto,footer{position:relative;z-index:1;}
+.hero-inner,.wrap,.footer-inner,.nav-inner{position:relative;z-index:2;}
 
-/* NAV */
-nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:1.2rem 3rem;background:var(--cream);border-bottom:1px solid rgba(26,58,42,.15);}
-.nav-logo{display:flex;align-items:center;gap:.6rem;font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:.1em;color:var(--green);text-decoration:none;}
-.cactus-svg{width:18px;height:28px;fill:var(--green);}
-.nav-cta{background:var(--green);color:var(--cream);font-family:'DM Mono',monospace;font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;padding:.6rem 1.4rem;text-decoration:none;transition:background .2s;}
-.nav-cta:hover{background:var(--black);}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 var(--pad);}
 
-/* HERO */
-.hero{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;padding-top:70px;overflow:hidden;}
-.hero-left{background:var(--green);display:flex;flex-direction:column;justify-content:center;padding:5rem 4rem 5rem 5rem;position:relative;overflow:hidden;}
-.hero-left::before{content:'';position:absolute;top:-40px;right:-40px;width:200px;height:200px;border:40px solid rgba(255,255,255,.04);border-radius:50%;}
-.hero-left::after{content:'';position:absolute;bottom:60px;left:-60px;width:300px;height:300px;border:60px solid rgba(255,255,255,.03);border-radius:50%;}
-.hero-tag{font-size:.65rem;letter-spacing:.25em;text-transform:uppercase;color:var(--green-light);margin-bottom:2rem;opacity:0;animation:fadeUp .8s .2s forwards;}
-.hero-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(4rem,7vw,7rem);line-height:.92;color:var(--cream);letter-spacing:.02em;opacity:0;animation:fadeUp .8s .4s forwards;}
-.hero-title .accent{color:var(--sand);font-family:'DM Serif Display',serif;font-style:italic;font-size:.85em;}
-.hero-sub{margin-top:2rem;font-size:.8rem;line-height:1.8;color:rgba(240,234,216,.65);max-width:340px;opacity:0;animation:fadeUp .8s .6s forwards;}
-.hero-btn{margin-top:3rem;display:inline-flex;align-items:center;gap:.8rem;background:var(--cream);color:var(--green);font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:.15em;padding:1rem 2rem;text-decoration:none;transition:background .2s,color .2s,transform .2s;opacity:0;animation:fadeUp .8s .8s forwards;align-self:flex-start;}
-.hero-btn:hover{background:var(--black);color:var(--cream);transform:translateX(4px);}
-.hero-btn svg{width:16px;height:16px;fill:currentColor;}
-.hero-right{background:var(--sand);display:flex;flex-direction:column;justify-content:center;align-items:center;padding:2.5rem;position:relative;overflow:hidden;}
-.checker{position:absolute;inset:0;opacity:.08;background-image:repeating-conic-gradient(var(--green) 0% 25%,transparent 0% 50%);background-size:40px 40px;}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,10,10,.96);backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,.07);}
+.nav-inner{max-width:var(--max);margin:0 auto;padding:.9rem var(--pad);display:flex;justify-content:space-between;align-items:center;}
+.nav-logo{font-family:'Geist',sans-serif;font-size:1rem;font-weight:900;color:var(--white);text-decoration:none;letter-spacing:-.02em;}
+.nav-links{display:flex;align-items:center;gap:2rem;}
+.nav-links a{font-size:.78rem;color:rgba(255,255,255,.55);text-decoration:none;transition:color .2s;}
+.nav-links a:hover{color:var(--white);}
+.nav-cta{background:var(--accent)!important;color:var(--black)!important;font-family:'Geist',sans-serif;font-weight:700;font-size:.75rem;padding:.5rem 1.2rem;border-radius:100px;}
 
-/* CACTUS */
-.hero-cactus-wrap{position:relative;z-index:2;width:100%;max-width:360px;display:flex;align-items:center;justify-content:center;opacity:0;animation:fadeUp .8s 1s forwards;}
-.hero-cactus-wrap svg{width:220px;height:auto;filter:drop-shadow(0 24px 48px rgba(0,0,0,.3));}
+.hero{min-height:100vh;display:flex;align-items:center;padding-top:60px;position:relative;overflow:hidden;background:transparent;}
 
-/* HERO STATS */
-.hero-stat-grid{position:relative;z-index:2;display:grid;grid-template-columns:1fr 1fr;gap:1px;background:rgba(26,58,42,.2);border:1px solid rgba(26,58,42,.2);width:100%;max-width:360px;margin-top:1.2rem;opacity:0;animation:fadeUp .8s 1.2s forwards;}
-.hero-stat{background:var(--sand);padding:1rem 1.2rem;}
-.hero-stat-num{font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--green);line-height:1;}
-.hero-stat-label{font-size:.55rem;letter-spacing:.12em;text-transform:uppercase;color:var(--green-mid);margin-top:.2rem;}
-.hero-road{position:absolute;bottom:0;left:0;right:0;height:4px;background:var(--green);opacity:.3;}
+.hero-inner{position:relative;z-index:2;max-width:var(--max);margin:0 auto;padding:4rem var(--pad);display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;}
+.hero-tag{font-size:.62rem;letter-spacing:.25em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem;opacity:0;animation:fadeUp .7s .1s forwards;}
+.hero-title{font-family:'Geist',sans-serif;font-size:clamp(2.4rem,5vw,4.2rem);font-weight:900;line-height:1.02;letter-spacing:-.03em;color:var(--white);opacity:0;animation:fadeUp .8s .2s forwards;}
+.hero-title .hl{color:var(--accent);}
+.hero-sub{margin-top:1.2rem;font-size:.9rem;color:rgba(255,255,255,.65);line-height:1.7;opacity:0;animation:fadeUp .8s .35s forwards;}
+.hero-actions{margin-top:2rem;display:flex;flex-direction:column;gap:.6rem;opacity:0;animation:fadeUp .8s .5s forwards;}
+.hero-btn{display:inline-flex;align-items:center;gap:.5rem;background:var(--accent);color:var(--black);font-family:'Geist',sans-serif;font-weight:700;font-size:.9rem;padding:.85rem 1.8rem;border-radius:100px;text-decoration:none;transition:opacity .2s,transform .15s;width:fit-content;}
+.hero-btn:hover{opacity:.88;transform:translateY(-1px);}
+.hero-note{font-size:.7rem;color:rgba(255,255,255,.5);}
+.hero-right{opacity:0;animation:fadeUp .9s .4s forwards;}
+.hero-badge{background:var(--accent);border-radius:8px;padding:2rem;text-align:center;}
+.hero-badge-num{font-family:'Geist',sans-serif;font-size:5rem;font-weight:900;color:var(--black);line-height:1;letter-spacing:-.05em;}
+.hero-badge-label{font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(0,0,0,.55);margin-top:.3rem;}
+.hero-stats{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:rgba(255,255,255,.08);border-radius:8px;overflow:hidden;margin-top:1px;}
+.hst{background:var(--dark);padding:1.2rem;text-align:center;}
+.hst-n{font-family:'Geist',sans-serif;font-size:1.5rem;font-weight:900;color:var(--accent);}
+.hst-l{font-size:.65rem;color:rgba(255,255,255,.5);margin-top:.2rem;}
 
-/* TICKER */
-.ticker{background:var(--green);color:var(--cream);padding:.8rem 0;overflow:hidden;white-space:nowrap;}
-.ticker-inner{display:inline-block;animation:ticker 22s linear infinite;font-family:'Bebas Neue',sans-serif;font-size:.9rem;letter-spacing:.2em;}
-.ticker-sep{margin:0 2rem;opacity:.4;}
+.s{padding:5rem 0;border-top:1px solid rgba(255,255,255,.07);background:rgba(10,10,10,0.75);}
+.s-dark{background:rgba(20,20,20,0.82);}
+.s-light{background:rgba(15,15,15,0.92);color:var(--white);}
+.label{font-size:.6rem;letter-spacing:.28em;text-transform:uppercase;color:var(--accent);margin-bottom:.8rem;display:flex;align-items:center;gap:.6rem;}
+.label::before{content:'';width:16px;height:1px;background:var(--accent);display:block;}
+.label-dk{color:var(--accent);}.label-dk::before{background:var(--accent);}
+.h2{font-family:'Geist',sans-serif;font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:900;line-height:1.05;letter-spacing:-.03em;color:var(--white);margin-bottom:2rem;}
+.h2 .hl{color:var(--accent);}
+.h2-blk{color:var(--black);}
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease;}
+.reveal.visible{opacity:1;transform:none;}
 
-/* SECTION TAG */
-.section-tag{font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;color:var(--green-light);margin-bottom:1.2rem;display:flex;align-items:center;gap:.8rem;}
-.section-tag::before{content:'';display:block;width:24px;height:1px;background:var(--green-light);}
+.prob-grid{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:start;}
+.pi{display:flex;gap:1.2rem;padding:1.2rem 0;border-bottom:1px solid rgba(255,255,255,.07);}
+.pi:first-child{border-top:1px solid rgba(255,255,255,.07);}
+.pi-num{font-family:'Geist',sans-serif;font-size:1.4rem;font-weight:900;color:rgba(200,232,90,.25);min-width:32px;line-height:1.2;}
+.pi-title{font-size:.85rem;font-weight:700;color:var(--white);margin-bottom:.25rem;}
+.pi-text{font-size:.78rem;color:rgba(255,255,255,.6);line-height:1.6;}
+.prob-quote{background:rgba(200,232,90,.06);border:1px solid rgba(200,232,90,.15);border-radius:8px;padding:2rem;}
+.pq-text{font-family:'Geist',sans-serif;font-size:1.05rem;font-weight:700;line-height:1.55;color:var(--white);}
+.pq-sub{margin-top:1rem;font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.4);}
 
-/* PROBLEM */
-.problem{padding:8rem 5rem;display:grid;grid-template-columns:1fr 1fr;gap:6rem;align-items:center;background:var(--white);position:relative;overflow:hidden;}
-.problem::before{content:'FRICCIÓN';position:absolute;font-family:'Bebas Neue',sans-serif;font-size:18vw;color:rgba(26,58,42,.03);top:50%;left:50%;transform:translate(-50%,-50%);white-space:nowrap;pointer-events:none;}
-.problem-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.5rem,4vw,4rem);line-height:.95;color:var(--black);}
-.problem-title .strike{text-decoration:line-through;color:var(--red);font-family:'DM Serif Display',serif;font-style:italic;}
-.problem-tagline{margin-top:1.5rem;font-family:'DM Serif Display',serif;font-style:italic;font-size:1.2rem;color:var(--green);line-height:1.4;}
-.problem-list{list-style:none;display:flex;flex-direction:column;gap:0;margin-top:2rem;}
-.problem-item{display:flex;align-items:flex-start;gap:1rem;padding:1.2rem 0;border-bottom:1px solid rgba(26,58,42,.1);}
-.problem-num{font-family:'Bebas Neue',sans-serif;font-size:2rem;line-height:1;color:rgba(26,58,42,.15);min-width:40px;}
-.problem-text{font-size:.8rem;line-height:1.7;color:#444;}
-.problem-text strong{color:var(--black);}
-.problem-right{background:var(--sand);padding:3rem;border-left:4px solid var(--green);}
-.problem-quote{font-family:'DM Serif Display',serif;font-style:italic;font-size:1.5rem;line-height:1.5;color:var(--green);}
-.problem-quote-sub{margin-top:1.5rem;font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:var(--green-light);}
+/* ANIMACIÓN MODERNA */
+.anim-wrap{border:1px solid rgba(255,255,255,.08);border-radius:16px;overflow:hidden;margin-bottom:1.5rem;background:#080808;}
+.anim-stage{position:relative;width:100%;height:240px;}
+#animCv{position:absolute;inset:0;width:100%;height:100%;}
 
-/* HOW */
-.how{background:var(--white);padding:7rem 5rem 6rem;position:relative;}
-.how-header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:3.5rem;}
-.how-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(3rem,5vw,5rem);color:var(--black);line-height:.9;}
-.how-title span{display:block;font-family:'DM Serif Display',serif;font-style:italic;color:var(--green);}
 
-/* ANIMATION STAGE */
-.anim-stage{position:relative;width:100%;height:220px;background:var(--sand);border-radius:14px;overflow:hidden;border:1px solid rgba(26,58,42,.12);}
-.anim-stage::before{content:'';position:absolute;inset:0;background-image:repeating-conic-gradient(#c8bc9a 0% 25%,var(--sand) 0% 50%);background-size:24px 24px;opacity:.45;}
-.anim-road{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);height:66px;background:#b5aa88;border-top:2px solid rgba(26,58,42,.2);border-bottom:2px solid rgba(26,58,42,.2);}
-.anim-road-dash{position:absolute;top:50%;transform:translateY(-50%);left:0;right:0;height:2px;background:repeating-linear-gradient(90deg,rgba(26,58,42,.28) 0 16px,transparent 16px 30px);}
-.anim-gate{position:absolute;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;align-items:center;z-index:10;}
-.anim-gate-entry{left:70px;}
-.anim-gate-exit{right:70px;}
-.anim-gate-post{width:9px;height:36px;background:var(--green);border-radius:4px;position:relative;}
-.anim-gate-arm{position:absolute;top:3px;left:9px;width:50px;height:8px;background:var(--red);border-radius:4px;transform-origin:left center;transform:rotate(0deg);transition:transform .45s cubic-bezier(.34,1.56,.64,1);}
-.anim-gate-arm.open{transform:rotate(-90deg);}
-.anim-gate-label{position:absolute;bottom:-24px;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:rgba(26,58,42,.6);white-space:nowrap;}
-.anim-parking{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:52px;height:66px;border:2px dashed rgba(26,58,42,.32);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:rgba(26,58,42,.32);transition:all .4s;z-index:5;}
-.anim-parking.occupied{border-color:rgba(26,58,42,.6);background:rgba(26,58,42,.07);color:rgba(26,58,42,.5);}
-.anim-scan-beam{position:absolute;top:50%;transform:translateY(-50%);left:74px;width:0;height:66px;background:linear-gradient(90deg,rgba(74,200,120,0),rgba(74,200,120,.4),rgba(74,200,120,0));opacity:0;pointer-events:none;z-index:20;transition:width .4s,opacity .3s;}
-.anim-scan-beam.show{width:140px;opacity:1;}
-.anim-plate-bubble{position:absolute;top:14px;left:50%;transform:translateX(-50%) translateY(-8px);background:var(--green);color:var(--sand);font-size:12px;font-weight:700;letter-spacing:.2em;padding:5px 18px;border-radius:100px;white-space:nowrap;opacity:0;transition:opacity .35s,transform .35s;z-index:30;pointer-events:none;}
-.anim-plate-bubble.show{opacity:1;transform:translateX(-50%) translateY(0);}
-#animCanvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:15;}
 
-/* ACTION PANEL */
-.anim-action{margin-top:1.6rem;display:flex;align-items:center;gap:1.4rem;min-height:88px;background:var(--green);border-radius:14px;padding:1.2rem 2rem;}
-.anim-icon{font-size:44px;line-height:1;flex-shrink:0;filter:drop-shadow(0 2px 8px rgba(0,0,0,.3));}
-.anim-title{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:.04em;color:var(--cream);margin-bottom:2px;}
-.anim-sub{font-size:.72rem;letter-spacing:.08em;color:rgba(212,201,168,.58);}
 
-/* STEP PILLS */
-.anim-steps{display:flex;gap:.6rem;margin-top:1.2rem;justify-content:center;}
-.anim-step{background:rgba(26,58,42,.06);border:1.5px solid rgba(26,58,42,.12);border-radius:100px;padding:7px 22px;font-size:.78rem;letter-spacing:.07em;color:rgba(26,58,42,.38);transition:all .35s;white-space:nowrap;cursor:default;}
-.anim-step.active{background:var(--green);border-color:var(--green);color:var(--cream);font-weight:700;}
-.anim-step.done{background:rgba(26,58,42,.1);border-color:rgba(26,58,42,.35);color:var(--green);}
 
-/* PRICING */
-.pricing{background:var(--cream);padding:8rem 5rem;display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start;}
-.price-big{font-family:'Bebas Neue',sans-serif;font-size:clamp(5rem,12vw,11rem);line-height:.85;color:var(--green);letter-spacing:-.02em;}
-.price-label{font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--green-light);margin-top:.5rem;}
-.price-desc{margin-top:2rem;font-size:.8rem;line-height:1.9;color:#555;max-width:380px;border-left:3px solid var(--green);padding-left:1.5rem;}
-.timeline{margin-top:3rem;display:flex;flex-direction:column;}
-.timeline-item{display:flex;gap:1.5rem;align-items:flex-start;padding:1.2rem 0;border-bottom:1px solid rgba(26,58,42,.08);}
-.timeline-dot{width:28px;height:28px;min-width:28px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:.8rem;color:var(--cream);margin-top:2px;}
-.timeline-label{font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--green-mid);}
-.timeline-text{font-size:.75rem;line-height:1.6;color:#555;margin-top:.2rem;}
-.price-right{background:var(--black);padding:3rem;color:var(--cream);}
-.price-right-title{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:.1em;color:var(--sand);margin-bottom:2rem;padding-bottom:1rem;border-bottom:1px solid rgba(255,255,255,.1);}
-.price-row{display:flex;justify-content:space-between;font-size:.75rem;padding:.8rem 0;border-bottom:1px solid rgba(255,255,255,.06);color:rgba(255,255,255,.65);}
-.price-row.total{color:var(--cream);font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:.08em;border-bottom:none;margin-top:.5rem;padding-top:1rem;border-top:1px solid rgba(255,255,255,.2);}
-.price-row span:last-child{color:var(--cream);}
-.price-row.total span:last-child{color:var(--sand);}
-.price-note{font-size:.6rem;margin-top:1.5rem;color:rgba(255,255,255,.25);letter-spacing:.1em;text-transform:uppercase;}
 
-/* EXISTING EQUIPMENT */
-.existing{background:var(--sand);padding:6rem 5rem;}
-.existing-header{margin-bottom:3.5rem;}
-.existing-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(2rem,4vw,3.5rem);line-height:.95;color:var(--green);}
-.existing-title em{font-family:'DM Serif Display',serif;font-style:italic;color:var(--green-mid);}
-.exist-list{display:flex;flex-direction:column;gap:2.5rem;max-width:700px;}
-.exist-item{display:flex;gap:1.8rem;align-items:flex-start;padding-bottom:2.5rem;border-bottom:1px solid rgba(26,58,42,.12);}
-.exist-item:last-child{border-bottom:none;padding-bottom:0;}
-.exist-icon-box{width:52px;height:52px;min-width:52px;background:var(--green);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;box-shadow:0 4px 12px rgba(26,58,42,.25);}
-.exist-name{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:.04em;color:var(--black);margin-bottom:.4rem;}
-.exist-text{font-size:.8rem;line-height:1.75;color:#555;}
 
-/* BENEFITS */
-.benefits{background:var(--white);padding:8rem 5rem;position:relative;overflow:hidden;}
-.benefits::before{content:'WINS';position:absolute;font-family:'Bebas Neue',sans-serif;font-size:22vw;color:rgba(26,58,42,.025);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;}
-.benefits-header{margin-bottom:3rem;}
-.benefits-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.5rem,5vw,5rem);line-height:.9;color:var(--black);}
-.benefits-title span{font-family:'DM Serif Display',serif;font-style:italic;color:var(--green);}
-.benefits-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem;position:relative;z-index:1;}
-.benefit-card{background:var(--cream);border-radius:16px;padding:2rem 1.8rem;border:1px solid rgba(26,58,42,.08);transition:transform .25s ease,box-shadow .25s ease,background .2s;cursor:default;}
-.benefit-card:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(26,58,42,.12);background:var(--white);}
-.benefit-icon-box{width:48px;height:48px;background:rgba(26,58,42,.07);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;margin-bottom:1.1rem;transition:background .2s;}
-.benefit-card:hover .benefit-icon-box{background:rgba(26,58,42,.12);}
-.benefit-title{font-family:'Bebas Neue',sans-serif;font-size:1.15rem;letter-spacing:.04em;color:var(--black);margin-bottom:.5rem;}
-.benefit-text{font-size:.75rem;line-height:1.75;color:#666;}
 
-/* TIMING */
-.timing{background:var(--green);padding:8rem 5rem;display:grid;grid-template-columns:1fr 1fr;gap:6rem;align-items:center;position:relative;overflow:hidden;}
-.timing::before{content:'';position:absolute;inset:0;background-image:repeating-conic-gradient(rgba(255,255,255,.02) 0% 25%,transparent 0% 50%);background-size:40px 40px;}
-.timing-left{position:relative;z-index:1;}
-.timing-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.5rem,5vw,5rem);line-height:.9;color:var(--cream);}
-.timing-title span{font-family:'DM Serif Display',serif;font-style:italic;color:var(--sand);}
-.timing-tags{margin-top:2rem;display:flex;flex-wrap:wrap;gap:.8rem;}
-.timing-tag{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);padding:.4rem 1rem;font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(240,234,216,.7);}
-.timing-right{position:relative;z-index:1;}
-.timing-stat{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);padding:3rem;}
-.timing-stat-num{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.5rem,4vw,4rem);line-height:1;color:var(--sand);}
-.timing-stat-text{margin-top:1rem;font-size:.78rem;line-height:1.8;color:rgba(240,234,216,.65);}
-.timing-sub{margin-top:1.5rem;font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(240,234,216,.3);}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.anim-panel{display:grid;grid-template-columns:1fr auto;align-items:center;gap:1rem;background:#0a0a0a;padding:1rem 1.4rem;border-top:1px solid rgba(255,255,255,.06);}
+.ap-left{display:flex;flex-direction:column;gap:2px;}
+.ap-step{font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(200,232,90,.5);font-family:'Geist',sans-serif;}
+.ap-title{font-family:'Geist',sans-serif;font-size:.9rem;font-weight:700;color:var(--white);}
+.ap-pills{display:flex;gap:.4rem;}
+.pill{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:100px;padding:5px 16px;font-size:.7rem;color:rgba(255,255,255,.4);font-family:'Geist',sans-serif;transition:all .4s;}
+.pill.active{background:var(--accent);border-color:var(--accent);color:var(--black);font-weight:700;}
+.pill.done{background:rgba(200,232,90,.08);border-color:rgba(200,232,90,.25);color:var(--accent);}
 
-/* MANIFESTO */
-.manifesto{background:var(--black);padding:10rem 5rem;text-align:center;position:relative;overflow:hidden;}
-.manifesto::before{content:'';position:absolute;inset:0;background-image:repeating-conic-gradient(rgba(255,255,255,.015) 0% 25%,transparent 0% 50%);background-size:50px 50px;}
-.manifesto-text{position:relative;z-index:1;font-family:'DM Serif Display',serif;font-style:italic;font-size:clamp(1.5rem,3vw,2.5rem);line-height:1.5;color:var(--cream);max-width:700px;margin:0 auto;}
-.manifesto-text .highlight{color:var(--sand);font-style:normal;font-family:'Bebas Neue',sans-serif;font-size:1.1em;letter-spacing:.05em;}
-.manifesto-sub{position:relative;z-index:1;margin-top:3rem;font-size:.65rem;letter-spacing:.3em;text-transform:uppercase;color:rgba(255,255,255,.3);}
+.how-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(255,255,255,.07);border-radius:8px;overflow:hidden;margin-bottom:1.5rem;}
+.hs-step{background:var(--dark);padding:1.8rem 1.5rem;}
+.hs-n2{font-family:'Geist',sans-serif;font-size:2.5rem;font-weight:900;color:var(--accent);line-height:1;margin-bottom:.6rem;}
+.hs-title{font-family:'Geist',sans-serif;font-size:.9rem;font-weight:700;color:var(--white);margin-bottom:.4rem;}
+.hs-text{font-size:.75rem;color:rgba(255,255,255,.6);line-height:1.6;}
+.killer{padding:1rem 1.4rem;background:rgba(200,232,90,.07);border-left:3px solid var(--accent);border-radius:0 6px 6px 0;font-size:.85rem;color:var(--accent);font-weight:500;}
 
-/* CTA */
-.cta-section{background:var(--green);padding:8rem 5rem;display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;position:relative;overflow:hidden;}
-.cta-section::after{content:'';position:absolute;right:-100px;top:50%;transform:translateY(-50%);width:400px;height:400px;border:80px solid rgba(255,255,255,.03);border-radius:50%;}
-.cta-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(3rem,5vw,5rem);line-height:.9;color:var(--cream);}
-.cta-title em{font-family:'DM Serif Display',serif;font-style:italic;color:var(--sand);display:block;}
-.cta-sub{margin-top:1.5rem;font-size:.75rem;line-height:1.8;color:rgba(240,234,216,.55);max-width:350px;}
-.cta-right{display:flex;flex-direction:column;gap:1rem;position:relative;z-index:1;}
-.cta-btn-wa{display:flex;align-items:center;justify-content:center;gap:1rem;background:var(--cream);color:var(--green);font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:.1em;padding:1.5rem 2rem;text-decoration:none;transition:background .2s,transform .2s;}
-.cta-btn-wa:hover{background:var(--sand);transform:translateY(-2px);}
-.cta-btn-wa svg{width:22px;height:22px;fill:currentColor;}
-.cta-note{font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(240,234,216,.35);text-align:center;}
-.cta-contact-alt{margin-top:.5rem;display:flex;flex-direction:column;gap:.5rem;}
-.cta-contact-alt a{font-size:.7rem;color:rgba(240,234,216,.5);text-decoration:none;letter-spacing:.05em;transition:color .2s;}
-.cta-contact-alt a:hover{color:var(--sand);}
+.pr-grid{display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:start;}
+.pr-zero{font-family:'Geist',sans-serif;font-size:clamp(5rem,12vw,9rem);font-weight:900;line-height:.85;letter-spacing:-.05em;color:var(--white);}
+.pr-zero span{color:var(--accent);}
+.pr-zero-label{font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-top:.5rem;}
+.pr-q{font-family:'Geist',sans-serif;font-size:1.1rem;font-weight:700;color:var(--white);margin-bottom:1.5rem;}
+.tl{margin-top:1.5rem;border-top:1px solid rgba(255,255,255,.1);}
+.tl-item{display:flex;gap:1rem;padding:1rem 0;border-bottom:1px solid rgba(255,255,255,.07);}
+.tl-dot{width:26px;height:26px;min-width:26px;border-radius:50%;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-family:'Geist',sans-serif;font-size:.7rem;font-weight:700;color:var(--white);margin-top:1px;}
+.tl-dot.g{background:var(--green);}
+.tl-label{font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:.25rem;}
+.tl-text{font-size:.78rem;line-height:1.6;color:rgba(255,255,255,.65);}
+.pr-card{background:var(--black);border-radius:8px;overflow:hidden;}
+.pr-card-head{padding:1.2rem 1.5rem;border-bottom:1px solid rgba(255,255,255,.07);}
+.pr-card-title{font-family:'Geist',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.5);}
+.pr-row{display:flex;justify-content:space-between;font-size:.78rem;padding:.8rem 1.5rem;border-bottom:1px solid rgba(255,255,255,.05);color:rgba(255,255,255,.65);}
+.pr-row.tot{color:var(--white);font-family:'Geist',sans-serif;font-size:.95rem;font-weight:700;padding:1rem 1.5rem;}
+.pr-row.tot .v{color:var(--accent);font-size:1.3rem;}
+.pr-note{font-size:.65rem;color:rgba(255,255,255,.5);padding:.8rem 1.5rem;background:rgba(200,232,90,.05);border-top:1px solid rgba(200,232,90,.1);}
+.pr-highlight{margin-top:.5rem;padding:1rem 1.5rem;background:rgba(200,232,90,.07);border-left:3px solid var(--accent);border-radius:0 6px 6px 0;}
+.pr-ht{font-family:'Geist',sans-serif;font-size:.85rem;font-weight:700;color:var(--accent);}
+.pr-hs{font-size:.72rem;color:rgba(255,255,255,.6);margin-top:.25rem;line-height:1.5;}
 
-/* FOOTER */
-footer{background:var(--black);padding:2rem 5rem;display:flex;justify-content:space-between;align-items:center;border-top:1px solid rgba(255,255,255,.06);}
-.footer-logo{font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:.15em;color:rgba(255,255,255,.3);display:flex;align-items:center;gap:.5rem;}
-.footer-copy{font-size:.6rem;letter-spacing:.1em;color:rgba(255,255,255,.2);}
+.compat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(255,255,255,.07);border-radius:8px;overflow:hidden;}
+.cc{background:var(--black);padding:1.8rem 1.5rem;}
+.cc-icon{font-size:1.5rem;margin-bottom:.9rem;display:block;}
+.cc-title{font-family:'Geist',sans-serif;font-size:.9rem;font-weight:700;color:var(--white);margin-bottom:.4rem;}
+.cc-text{font-size:.75rem;line-height:1.6;color:rgba(255,255,255,.6);}
+.cc-tag{display:inline-block;margin-top:.7rem;padding:2px 10px;background:rgba(200,232,90,.08);border-radius:20px;font-size:.6rem;color:var(--accent);font-weight:600;letter-spacing:.05em;border:1px solid rgba(200,232,90,.15);}
 
-/* ANIMATIONS */
-@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-@keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-.reveal{opacity:0;transform:translateY(30px);transition:opacity .7s ease,transform .7s ease;}
-.reveal.visible{opacity:1;transform:translateY(0);}
+.ben-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:rgba(255,255,255,.07);border-radius:8px;overflow:hidden;}
+.bc{background:var(--dark);padding:1.8rem 1.5rem;display:flex;gap:1rem;align-items:flex-start;transition:background .2s;}
+.bc:hover{background:#1e1e1e;}
+.bc-icon{width:38px;height:38px;min-width:38px;background:rgba(200,232,90,.08);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:1rem;border:1px solid rgba(200,232,90,.12);}
+.bc-title{font-family:'Geist',sans-serif;font-size:.88rem;font-weight:700;color:var(--white);margin-bottom:.3rem;}
+.bc-text{font-size:.75rem;line-height:1.6;color:rgba(255,255,255,.6);}
 
-/* RESPONSIVE */
-@media(max-width:900px){
-  nav{padding:1rem 1.5rem;}
-  .hero{grid-template-columns:1fr;}
-  .hero-right{min-height:360px;}
-  .hero-left{padding:4rem 2rem;}
-  .hero-cactus-wrap,.hero-stat-grid{max-width:100%;}
-  .problem,.pricing,.cta-section,.timing{grid-template-columns:1fr;padding:4rem 2rem;gap:3rem;}
-  .how{padding:4rem 2rem;}
-  .how-header{flex-direction:column;align-items:flex-start;gap:1rem;}
-  .benefits-grid{grid-template-columns:1fr 1fr;}
-  .existing,.benefits{padding:4rem 2rem;}
-  .manifesto{padding:6rem 2rem;}
-  footer{flex-direction:column;gap:1rem;padding:2rem;}
-  .anim-steps{flex-wrap:wrap;}
+.tim-grid{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center;}
+.tim-blocks{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:rgba(255,255,255,.07);border-radius:8px;overflow:hidden;}
+.tb{background:var(--black);padding:1.8rem 1.5rem;}
+.tb.ac{background:var(--accent);}
+.tb-label{font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:.5rem;}
+.tb.ac .tb-label{color:rgba(0,0,0,.5);}
+.tb-num{font-family:'Geist',sans-serif;font-size:clamp(1.8rem,3vw,2.8rem);font-weight:900;color:var(--white);line-height:1;margin-bottom:.4rem;}
+.tb.ac .tb-num{color:var(--black);}
+.tb-text{font-size:.72rem;line-height:1.5;color:rgba(255,255,255,.55);}
+.tb.ac .tb-text{color:rgba(0,0,0,.5);}
+.tim-sub{font-size:.85rem;color:rgba(255,255,255,.65);line-height:1.7;margin-bottom:1.5rem;}
+.tim-quote{padding:1rem 1.2rem;border-left:3px solid var(--accent);font-size:.82rem;color:rgba(255,255,255,.65);line-height:1.6;background:rgba(200,232,90,.04);border-radius:0 6px 6px 0;}
+.tim-quote strong{color:var(--white);}
+
+.manifesto{padding:6rem 0;background:rgba(20,20,20,0.8);border-top:1px solid rgba(255,255,255,.07);text-align:center;}
+.man-text{font-family:'Geist',sans-serif;font-size:clamp(1.8rem,3.5vw,3rem);font-weight:900;line-height:1.1;color:var(--white);max-width:700px;margin:0 auto;letter-spacing:-.02em;}
+.man-text .hl{color:var(--accent);}
+.man-sub{margin-top:2rem;font-size:.6rem;letter-spacing:.25em;text-transform:uppercase;color:rgba(255,255,255,.45);}
+
+.cta-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;}
+.cta-title{font-family:'Geist',sans-serif;font-size:clamp(2rem,4vw,3.2rem);font-weight:900;line-height:1.02;letter-spacing:-.03em;color:var(--white);}
+.cta-title .hl{color:var(--accent);}
+.cta-sub{margin-top:1rem;font-size:.85rem;line-height:1.7;color:rgba(255,255,255,.65);}
+.cta-right{display:flex;flex-direction:column;gap:.7rem;}
+.cta-wa{display:flex;align-items:center;justify-content:center;gap:.7rem;background:var(--accent);color:var(--black);font-family:'Geist',sans-serif;font-weight:700;font-size:.95rem;padding:1.1rem 1.8rem;text-decoration:none;border-radius:100px;transition:opacity .2s,transform .15s;}
+.cta-wa:hover{opacity:.88;transform:translateY(-1px);}
+.cta-note{font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.6);text-align:center;}
+.cta-links{display:flex;flex-direction:column;gap:.3rem;padding:.8rem 0;border-top:1px solid rgba(255,255,255,.08);border-bottom:1px solid rgba(255,255,255,.08);}
+.cta-links a{font-size:.78rem;color:rgba(255,255,255,.7);text-decoration:none;transition:color .2s;}
+.cta-links a:hover{color:var(--accent);}
+.cta-promise{display:flex;justify-content:space-between;gap:.5rem;}
+.cp{text-align:center;flex:1;padding:.7rem .5rem;background:rgba(255,255,255,.04);border-radius:6px;border:1px solid rgba(255,255,255,.07);}
+.cp span{font-family:'Geist',sans-serif;font-size:.75rem;font-weight:700;color:rgba(255,255,255,.7);}
+.cp:last-child span{color:var(--accent);}
+
+footer{background:rgba(10,10,10,0.9);border-top:1px solid rgba(255,255,255,.07);position:relative;z-index:1;}
+.footer-inner{max-width:var(--max);margin:0 auto;padding:1.4rem var(--pad);display:flex;justify-content:space-between;align-items:center;}
+.f-logo{font-family:'Geist',sans-serif;font-weight:900;font-size:.9rem;color:rgba(255,255,255,.5);}
+.f-copy{font-size:.65rem;color:rgba(255,255,255,.4);}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+@media(max-width:800px){
+  .hero-inner,.prob-grid,.pr-grid,.tim-grid,.cta-grid{grid-template-columns:1fr;gap:2rem;}
+  .hero-right,.nav-links a:not(.nav-cta){display:none;}
+  .how-steps,.compat-grid{grid-template-columns:1fr;}
+  .ben-grid,.tim-blocks{grid-template-columns:1fr;}
+  .cta-promise{flex-direction:column;}
+  .s{padding:3.5rem 0;}
+  .manifesto{padding:4rem 0;}
 }
 </style>
 </head>
 <body>
 
-<!-- NAV -->
+<canvas id="globalBg"></canvas>
 <nav>
-  <a href="#" class="nav-logo">
-    <svg class="cactus-svg" viewBox="0 0 24 40"><rect x="10" y="0" width="4" height="30" rx="2"/><rect x="2" y="10" width="8" height="4" rx="2"/><rect x="2" y="10" width="4" height="10" rx="2"/><rect x="14" y="15" width="8" height="4" rx="2"/><rect x="18" y="15" width="4" height="8" rx="2"/><rect x="10" y="30" width="4" height="10" rx="2"/></svg>
-    Road Less
-  </a>
-  <a href="#contacto" class="nav-cta">Agenda tu diagnóstico →</a>
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">🌵 Road Less</a>
+    <div class="nav-links">
+      <a href="#como-funciona">Cómo funciona</a>
+      <a href="#precio">Precio</a>
+      <a href="#contacto" class="nav-cta">Agendar →</a>
+    </div>
+  </div>
 </nav>
 
-<!-- HERO -->
 <section class="hero">
-  <div class="hero-left">
-    <p class="hero-tag">Tecnología de estacionamiento · Monterrey, MX</p>
-    <h1 class="hero-title">Tu plaza.<br><span class="accent">Sin fricción.</span><br>Sin costo.</h1>
-    <p class="hero-sub">Road Less instala, opera y automatiza tu estacionamiento completo. Sin inversión de tu parte. Sin tickets. Sin filas. Sin personal.</p>
-    <a href="#contacto" class="hero-btn">
-      <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      Agenda diagnóstico gratuito
-    </a>
-  </div>
-  <div class="hero-right">
-    <div class="checker"></div>
-    <div class="hero-cactus-wrap">
-      <svg viewBox="0 0 260 380" xmlns="http://www.w3.org/2000/svg">
-        <ellipse cx="130" cy="368" rx="55" ry="9" fill="rgba(0,0,0,0.18)"/>
-        <rect x="108" y="60" width="44" height="300" rx="22" fill="#2d5a3d"/>
-        <rect x="48" y="148" width="62" height="28" rx="14" fill="#2d5a3d"/>
-        <rect x="48" y="100" width="28" height="76" rx="14" fill="#2d5a3d"/>
-        <ellipse cx="62" cy="100" rx="14" ry="14" fill="#2d5a3d"/>
-        <rect x="150" y="190" width="62" height="28" rx="14" fill="#2d5a3d"/>
-        <rect x="184" y="148" width="28" height="70" rx="14" fill="#2d5a3d"/>
-        <ellipse cx="198" cy="148" rx="14" ry="14" fill="#2d5a3d"/>
-        <ellipse cx="130" cy="60" rx="22" ry="22" fill="#2d5a3d"/>
-        <rect x="122" y="80" width="8" height="240" rx="4" fill="rgba(255,255,255,0.07)"/>
-        <rect x="56" y="110" width="6" height="50" rx="3" fill="rgba(255,255,255,0.07)"/>
-        <rect x="192" y="155" width="6" height="44" rx="3" fill="rgba(255,255,255,0.07)"/>
-        <g stroke="#1a3a2a" stroke-width="2" stroke-linecap="round">
-          <line x1="108" y1="130" x2="94" y2="124"/><line x1="152" y1="130" x2="166" y2="124"/>
-          <line x1="108" y1="180" x2="94" y2="174"/><line x1="152" y1="180" x2="166" y2="174"/>
-          <line x1="108" y1="230" x2="94" y2="224"/><line x1="152" y1="230" x2="166" y2="224"/>
-          <line x1="108" y1="280" x2="94" y2="274"/><line x1="152" y1="280" x2="166" y2="274"/>
-        </g>
-        <ellipse cx="130" cy="46" rx="10" ry="10" fill="#f0ead8"/>
-        <ellipse cx="130" cy="46" rx="5" ry="5" fill="#d4c9a8"/>
-        <ellipse cx="118" cy="48" rx="7" ry="7" fill="#f0ead8"/>
-        <ellipse cx="142" cy="48" rx="7" ry="7" fill="#f0ead8"/>
-        <ellipse cx="124" cy="38" rx="7" ry="7" fill="#f0ead8"/>
-        <ellipse cx="136" cy="38" rx="7" ry="7" fill="#f0ead8"/>
-        <ellipse cx="130" cy="46" rx="6" ry="6" fill="#c0392b" opacity="0.8"/>
-        <ellipse cx="62" cy="90" rx="6" ry="6" fill="#f0ead8"/>
-        <ellipse cx="62" cy="90" rx="3" ry="3" fill="#c0392b" opacity="0.7"/>
-        <ellipse cx="198" cy="138" rx="6" ry="6" fill="#f0ead8"/>
-        <ellipse cx="198" cy="138" rx="3" ry="3" fill="#c0392b" opacity="0.7"/>
-        <ellipse cx="130" cy="362" rx="50" ry="10" fill="#2d5a3d" opacity="0.35"/>
-      </svg>
-    </div>
-    <div class="hero-stat-grid">
-      <div class="hero-stat"><div class="hero-stat-num">$0</div><div class="hero-stat-label">Inversión inicial</div></div>
-      <div class="hero-stat"><div class="hero-stat-num">~3</div><div class="hero-stat-label">Meses recuperación</div></div>
-      <div class="hero-stat"><div class="hero-stat-num">Días</div><div class="hero-stat-label">Para estar operando</div></div>
-      <div class="hero-stat"><div class="hero-stat-num">100%</div><div class="hero-stat-label">Hands-free usuario</div></div>
-    </div>
-    <div class="hero-road"></div>
-  </div>
-</section>
-
-<!-- TICKER -->
-<div class="ticker">
-  <div class="ticker-inner">
-    ESTACIONA SIN MANOS <span class="ticker-sep">·</span> SIN TICKETS <span class="ticker-sep">·</span> SIN FILAS <span class="ticker-sep">·</span> SIN INVERSIÓN INICIAL <span class="ticker-sep">·</span> TECNOLOGÍA LPR <span class="ticker-sep">·</span> COBRO AUTOMÁTICO <span class="ticker-sep">·</span> EL CLIENTE NUNCA SE DETIENE <span class="ticker-sep">·</span> ROAD LESS <span class="ticker-sep">·</span> ESTACIONA SIN MANOS <span class="ticker-sep">·</span> SIN TICKETS <span class="ticker-sep">·</span> SIN FILAS <span class="ticker-sep">·</span> SIN INVERSIÓN INICIAL <span class="ticker-sep">·</span> TECNOLOGÍA LPR <span class="ticker-sep">·</span> COBRO AUTOMÁTICO <span class="ticker-sep">·</span> EL CLIENTE NUNCA SE DETIENE <span class="ticker-sep">·</span> ROAD LESS <span class="ticker-sep">·</span>
-  </div>
-</div>
-
-<!-- PROBLEM -->
-<section class="problem">
-  <div class="reveal">
-    <p class="section-tag">El problema</p>
-    <h2 class="problem-title">Hoy tu estacionamiento<br><span class="strike">pierde dinero</span><br>en filas, fricción<br>y operación manual.</h2>
-    <p class="problem-tagline">Con Road Less el cliente nunca se detiene.</p>
-    <ul class="problem-list">
-      <li class="problem-item"><span class="problem-num">01</span><p class="problem-text"><strong>Filas en entrada y salida.</strong> Cada vehículo que espera en la pluma es tiempo perdido, clientes frustrados y menos rotación de cajones.</p></li>
-      <li class="problem-item"><span class="problem-num">02</span><p class="problem-text"><strong>Fricción constante.</strong> Tickets, máquinas de cobro, errores de lectura. Tu cliente llega molesto antes de entrar a tu plaza.</p></li>
-      <li class="problem-item"><span class="problem-num">03</span><p class="problem-text"><strong>Operación manual 24/7.</strong> Personal en caseta, mantenimiento de máquinas, costos fijos que no paran de crecer.</p></li>
-    </ul>
-  </div>
-  <div class="problem-right reveal">
-    <p class="problem-quote">"El estacionamiento es el primer y último contacto de tu cliente con tu plaza. Con Road Less, ese contacto es invisible — y eso lo cambia todo."</p>
-    <p class="problem-quote-sub">Road Less · Tecnología de estacionamiento · Monterrey, MX</p>
-  </div>
-</section>
-
-<!-- HOW IT WORKS -->
-<section class="how" id="como-funciona">
-  <div class="how-header reveal">
+  
+  <div class="hero-inner">
     <div>
-      <p class="section-tag">¿Cómo funciona?</p>
-      <h2 class="how-title">Así de<br><span>simple.</span></h2>
+      <p class="hero-tag">Tecnología LPR · Monterrey, N.L. · 2026</p>
+      <h1 class="hero-title">Tu estacionamiento<br><span class="hl">automatizado.</span><br>Sin invertir un peso.</h1>
+      <p class="hero-sub">Road Less instala, opera y automatiza tu estacionamiento completo. Sin tickets. Sin filas. Sin personal. El cliente nunca se detiene.</p>
+      <div class="hero-actions">
+        <a href="#contacto" class="hero-btn">Agenda diagnóstico gratuito →</a>
+        <span class="hero-note">Sin costo · Sin compromiso · Respuesta en 2 hrs</span>
+      </div>
     </div>
-    <p style="font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(26,58,42,.4);max-width:220px;text-align:right;line-height:1.7;">Tres pasos. El cliente no toca nada. Road Less hace todo.</p>
-  </div>
-
-  <div class="anim-stage reveal" id="animStage">
-    <div class="anim-road"><div class="anim-road-dash"></div></div>
-    <div class="anim-parking" id="animParking">P</div>
-    <div class="anim-gate anim-gate-entry"><div class="anim-gate-post"><div class="anim-gate-arm" id="animArmEntry"></div></div><span class="anim-gate-label">Entrada</span></div>
-    <div class="anim-gate anim-gate-exit"><div class="anim-gate-post"><div class="anim-gate-arm" id="animArmExit"></div></div><span class="anim-gate-label">Salida</span></div>
-    <div class="anim-scan-beam" id="animScanBeam"></div>
-    <div class="anim-plate-bubble" id="animPlateBubble">VEA-011-B ✓</div>
-    <canvas id="animCanvas"></canvas>
-  </div>
-
-  <div class="anim-action reveal">
-    <div class="anim-icon" id="animIcon">🚗</div>
-    <div>
-      <div class="anim-title" id="animTitle">El carrito se acerca a la entrada</div>
-      <div class="anim-sub" id="animSub">PLACA: VEA-011-B — DETECTADA POR LA CÁMARA</div>
-    </div>
-  </div>
-
-  <div class="anim-steps">
-    <div class="anim-step" id="as0">🚗 &nbsp;Llega</div>
-    <div class="anim-step" id="as1">🅿️ &nbsp;Se estaciona</div>
-    <div class="anim-step" id="as2">👋 &nbsp;Sale sin parar</div>
-  </div>
-</section>
-
-<!-- PRICING -->
-<section class="pricing" id="precio">
-  <div class="reveal">
-    <p class="section-tag">¿Cuánto te cuesta implementarlo?</p>
-    <div class="price-big">$0</div>
-    <p class="price-label">MXN de inversión inicial para tu estacionamiento</p>
-    <p class="price-desc">Nosotros instalamos y pagamos todo el equipo. Operamos el estacionamiento hasta recuperar la inversión — aproximadamente 3 meses. Después de eso, el equipo es completamente tuyo y el estacionamiento queda automatizado.</p>
-    <div class="timeline">
-      <div class="timeline-item"><div class="timeline-dot">1</div><div><p class="timeline-label">Día 1 – 3</p><p class="timeline-text">Diagnóstico técnico gratuito e instalación del equipo Road Less en tus accesos. Sin costo para ti.</p></div></div>
-      <div class="timeline-item"><div class="timeline-dot">2</div><div><p class="timeline-label">Mes 1 – 3</p><p class="timeline-text">Operamos el estacionamiento y recuperamos nuestra inversión en equipo. Tú solo ves cómo fluye.</p></div></div>
-      <div class="timeline-item"><div class="timeline-dot">3</div><div><p class="timeline-label">Mes 4 en adelante</p><p class="timeline-text">El equipo es tuyo. Solo cobramos un pequeño fee de 10% + $1 MXN por transacción — lo paga el usuario, no tú.</p></div></div>
-    </div>
-  </div>
-  <div class="price-right reveal">
-    <p class="price-right-title">Ejemplo de cobro real</p>
-    <div class="price-row"><span>Tarifa por hora</span><span>$30 MXN</span></div>
-    <div class="price-row"><span>Tiempo en estacionamiento</span><span>2 horas</span></div>
-    <div class="price-row"><span>Estacionamiento</span><span>$60 MXN</span></div>
-    <div class="price-row"><span>Fee Road Less (10% + $1 MXN)</span><span>$7 MXN</span></div>
-    <div class="price-row total"><span>Total a pagar</span><span>$67 MXN</span></div>
-    <p class="price-note">El fee lo paga el cliente. Tú recibes el 100% de tu tarifa.</p>
-  </div>
-</section>
-
-<!-- EXISTING EQUIPMENT -->
-<section class="existing" id="compatibilidad">
-  <div class="existing-header reveal">
-    <p class="section-tag">¿Ya tienes tu propio equipo?</p>
-    <h2 class="existing-title">Road Less se adapta<br><em>a lo que ya tienes.</em></h2>
-  </div>
-  <div class="exist-list">
-    <div class="exist-item reveal">
-      <div class="exist-icon-box">🔌</div>
-      <div><h3 class="exist-name">Compatibilidad total</h3><p class="exist-text">No necesitas desechar tu inversión actual. Road Less se integra con la mayoría de plumas y barreras del mercado mediante nuestro software.</p></div>
-    </div>
-    <div class="exist-item reveal" style="transition-delay:.15s">
-      <div class="exist-icon-box">📸</div>
-      <div><h3 class="exist-name">Modernización modular</h3><p class="exist-text">Podemos utilizar tus cámaras existentes o instalar las nuestras para complementar el sistema de lectura de placas (LPR).</p></div>
-    </div>
-    <div class="exist-item reveal" style="transition-delay:.3s">
-      <div class="exist-icon-box">⚡</div>
-      <div><h3 class="exist-name">Transición fluida</h3><p class="exist-text">Implementamos nuestra tecnología sobre tu infraestructura actual para que el estacionamiento pase a ser "fricción cero" en cuestión de días.</p></div>
+    <div class="hero-right">
+      <div class="hero-badge">
+        <div class="hero-badge-num">$0</div>
+        <div class="hero-badge-label">de inversión inicial</div>
+      </div>
+      <div class="hero-stats">
+        <div class="hst"><div class="hst-n">0</div><div class="hst-l">Tickets</div></div>
+        <div class="hst"><div class="hst-n">0</div><div class="hst-l">Filas</div></div>
+        <div class="hst"><div class="hst-n">24/7</div><div class="hst-l">Automático</div></div>
+        <div class="hst"><div class="hst-n">100%</div><div class="hst-l">Tu tarifa</div></div>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- BENEFITS -->
-<section class="benefits" id="beneficios">
-  <div class="benefits-header reveal">
-    <p class="section-tag">Beneficios</p>
-    <h2 class="benefits-title">Lo que ganas<br><span>con Road Less.</span></h2>
-  </div>
-  <div class="benefits-grid">
-    <div class="benefit-card reveal"><div class="benefit-icon-box">🤖</div><h3 class="benefit-title">Tecnología avanzada</h3><p class="benefit-text">Inteligencia artificial y visión computacional de última generación para lectura de placas LPR con alta precisión en cualquier condición.</p></div>
-    <div class="benefit-card reveal" style="transition-delay:.08s"><div class="benefit-icon-box">⚡</div><h3 class="benefit-title">Eficiencia pura</h3><p class="benefit-text">Elimina filas y tiempos de espera. Más rotación de cajones, más ingresos para ti.</p></div>
-    <div class="benefit-card reveal" style="transition-delay:.16s"><div class="benefit-icon-box">👤</div><h3 class="benefit-title">Sin personal operando</h3><p class="benefit-text">Reduce costos de nómina. El sistema opera 24/7 de forma completamente autónoma.</p></div>
-    <div class="benefit-card reveal" style="transition-delay:.24s"><div class="benefit-icon-box">⭐</div><h3 class="benefit-title">Diferenciación competitiva</h3><p class="benefit-text">Sé el estacionamiento preferido. Los clientes regresarán por la experiencia sin fricción.</p></div>
-    <div class="benefit-card reveal" style="transition-delay:.32s"><div class="benefit-icon-box">🧠</div><h3 class="benefit-title">Inteligencia artificial</h3><p class="benefit-text">El sistema aprende y mejora con cada vehículo. Precisión superior en cualquier condición.</p></div>
-    <div class="benefit-card reveal" style="transition-delay:.4s"><div class="benefit-icon-box">📈</div><h3 class="benefit-title">Incremento en ventas</h3><p class="benefit-text">Una experiencia fluida impulsa más visitas y mayor tiempo de permanencia en tu plaza.</p></div>
-  </div>
-</section>
-
-<!-- TIMING -->
-<section class="timing">
-  <div class="timing-left">
-    <p class="section-tag" style="color:rgba(240,234,216,.4);">El momento es ahora</p>
-    <h2 class="timing-title reveal">Las nuevas<br>generaciones<br>quieren <span>todo en<br>un clic,</span><br>esfuerzo mínimo.</h2>
-    <div class="timing-tags reveal">
-      <span class="timing-tag">Construcción vertical</span>
-      <span class="timing-tag">Ciudades inteligentes</span>
-      <span class="timing-tag">Auto + nube</span>
-    </div>
-  </div>
-  <div class="timing-right">
-    <div class="timing-stat reveal">
-      <div class="timing-stat-num">1 de cada 4</div>
-      <p class="timing-stat-text">Para finales de 2026, se espera que 1 de cada 4 pagos de estacionamiento en ciudades inteligentes sea totalmente automático gracias a la integración del automóvil con la nube.</p>
-      <p class="timing-sub">Proyección · Ciudades inteligentes · 2026</p>
+<section class="s">
+  <div class="wrap">
+    <div class="prob-grid">
+      <div class="reveal">
+        <p class="label">El problema</p>
+        <h2 class="h2">Tu estacionamiento está perdiendo dinero <span class="hl">ahorita mismo.</span></h2>
+        <div>
+          <div class="pi"><span class="pi-num">01</span><div><p class="pi-title">Cada fila es un cliente frustrado</p><p class="pi-text">Antes de entrar a tu plaza, tu cliente ya está molesto. Esa es la primera impresión de tu negocio.</p></div></div>
+          <div class="pi"><span class="pi-num">02</span><div><p class="pi-title">Cada cajero es un costo fijo que no para</p><p class="pi-text">Nómina, turnos, errores humanos. Operación manual 24/7 que come tu margen todos los días.</p></div></div>
+          <div class="pi"><span class="pi-num">03</span><div><p class="pi-title">Cada ticket es fricción que tu competencia ya eliminó</p><p class="pi-text">Mientras tu plaza sigue con boletos, otras ya automatizaron. El cliente elige donde es más fácil.</p></div></div>
+        </div>
+      </div>
+      <div class="prob-quote reveal">
+        <p class="pq-text">"El estacionamiento es el primer y último contacto de tu cliente con tu plaza. Con Road Less, ese contacto es invisible — y eso lo cambia todo."</p>
+        <p class="pq-sub">Road Less · Monterrey, MX</p>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- MANIFESTO -->
+<section class="s s-dark" id="como-funciona">
+  <div class="wrap">
+    <p class="label reveal">Cómo funciona</p>
+    <h2 class="h2 reveal">El cliente nunca se detiene. <span class="hl">Ni una vez.</span></h2>
+    <div class="anim-wrap reveal">
+      <div class="anim-stage" id="animStage">
+        <canvas id="animCv"></canvas>
+          <div class="hud-status">
+            <span class="hud-status-dot"></span>
+            <span class="hud-status-text">Sistema activo</span>
+          </div>
+        </div>
+      </div>
+      <div class="anim-panel">
+        <div class="ap-left">
+          <div class="ap-step" id="apStep">Paso 1 de 3</div>
+          <div class="ap-title" id="apTitle">El cliente se acerca a la entrada</div>
+        </div>
+        <div class="ap-pills">
+          <div class="pill" id="pl0">Llega</div>
+          <div class="pill" id="pl1">Estaciona</div>
+          <div class="pill" id="pl2">Sale</div>
+        </div>
+      </div>
+    </div>
+    <div class="how-steps reveal">
+      <div class="hs-step"><div class="hs-n2">1</div><h3 class="hs-title">Llega</h3><p class="hs-text">La cámara lee su placa al instante. La pluma se abre sola. Sin detenerse, sin bajar el vidrio, sin tocar nada.</p></div>
+      <div class="hs-step"><div class="hs-n2">2</div><h3 class="hs-title">Se estaciona</h3><p class="hs-text">El sistema registra el tiempo automáticamente. Road Less lleva la cuenta solo mientras el cliente disfruta.</p></div>
+      <div class="hs-step"><div class="hs-n2">3</div><h3 class="hs-title">Sale</h3><p class="hs-text">El cobro va directo a su tarjeta al detectar su placa en salida. La pluma se abre. Sin filas, sin app, sin QR.</p></div>
+    </div>
+    <div class="killer reveal">El único sistema en Monterrey donde el cliente no toca nada. <strong>Sin app. Sin QR. Sin nada.</strong></div>
+  </div>
+</section>
+
+<section class="s s-light" id="precio">
+  <div class="wrap">
+    <div class="pr-grid">
+      <div class="reveal">
+        <p class="label label-dk">Inversión</p>
+        <p class="pr-q">¿Cuánto te cuesta implementarlo?</p>
+        <div class="pr-zero">$<span>0</span></div>
+        <p class="pr-zero-label">MXN de inversión inicial</p>
+        <div class="tl">
+          <div class="tl-item"><div class="tl-dot">1</div><div><p class="tl-label">Días 1 – 3</p><p class="tl-text">Diagnóstico técnico gratuito e instalación del equipo LPR en tus accesos. Sin costo.</p></div></div>
+          <div class="tl-item"><div class="tl-dot">2</div><div><p class="tl-label">Mes 1 – 3</p><p class="tl-text">Operamos el estacionamiento y recuperamos nuestra inversión. Tú solo observas.</p></div></div>
+          <div class="tl-item"><div class="tl-dot g">3</div><div><p class="tl-label">Mes 4 en adelante</p><p class="tl-text">El equipo es tuyo. Solo cobramos 10% + $1 MXN por transacción — lo paga tu cliente.</p></div></div>
+        </div>
+      </div>
+      <div class="reveal">
+        <div class="pr-card">
+          <div class="pr-card-head"><p class="pr-card-title">Ejemplo de cobro real</p></div>
+          <div class="pr-row"><span>Tarifa por hora</span><span>$30 MXN</span></div>
+          <div class="pr-row"><span>Tiempo estacionado</span><span>2 horas</span></div>
+          <div class="pr-row"><span>Total estacionamiento</span><span>$60 MXN</span></div>
+          <div class="pr-row"><span>Fee Road Less (10% + $1)</span><span>$7 MXN</span></div>
+          <div class="pr-row tot"><span>Total cliente paga</span><span class="v">$67</span></div>
+          <p class="pr-note">El fee lo paga el cliente. Tú recibes el 100% de tu tarifa.</p>
+        </div>
+        <div class="pr-highlight">
+          <p class="pr-ht">Tú cobras el 100% de tu tarifa. Siempre.</p>
+          <p class="pr-hs">Nos pagamos solos con el fee al cliente — tú no cedes nada de tu tarifa.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="s" id="compatibilidad">
+  <div class="wrap">
+    <p class="label reveal">Compatibilidad</p>
+    <h2 class="h2 reveal">¿Ya tienes plumas o cámaras?<br><span class="hl">No hay problema.</span></h2>
+    <div class="compat-grid">
+      <div class="cc reveal"><span class="cc-icon">🔌</span><h3 class="cc-title">Compatibilidad total</h3><p class="cc-text">Nos integramos con la mayoría de plumas y barreras del mercado. No tiras tu inversión — la potenciamos.</p><span class="cc-tag">Sin desechar equipo</span></div>
+      <div class="cc reveal" style="transition-delay:.1s"><span class="cc-icon">📸</span><h3 class="cc-title">Usamos tus cámaras</h3><p class="cc-text">Si ya tienes cámaras, las aprovechamos. Si no, instalamos las nuestras sin costo extra para ti.</p><span class="cc-tag">Modular</span></div>
+      <div class="cc reveal" style="transition-delay:.2s"><span class="cc-icon">⚡</span><h3 class="cc-title">Operando en días</h3><p class="cc-text">No semanas, no meses. Tu estacionamiento pasa a fricción cero en días desde la instalación.</p><span class="cc-tag">Implementación rápida</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="s s-dark" id="beneficios">
+  <div class="wrap">
+    <p class="label reveal">Beneficios</p>
+    <h2 class="h2 reveal">Lo que gana tu plaza <span class="hl">con Road Less.</span></h2>
+    <div class="ben-grid">
+      <div class="bc reveal"><div class="bc-icon">🔄</div><div><h3 class="bc-title">Más rotación de cajones</h3><p class="bc-text">Sin filas en salida = más autos por hora = más ingresos sin cambiar tarifas.</p></div></div>
+      <div class="bc reveal" style="transition-delay:.08s"><div class="bc-icon">👤</div><div><h3 class="bc-title">Cero personal en caseta</h3><p class="bc-text">El sistema opera 24/7 solo. Sin nómina extra, sin errores humanos.</p></div></div>
+      <div class="bc reveal" style="transition-delay:.16s"><div class="bc-icon">⭐</div><div><h3 class="bc-title">El estacionamiento favorito</h3><p class="bc-text">Los clientes que lo usan una vez no quieren otro. La experiencia invisible genera lealtad.</p></div></div>
+      <div class="bc reveal" style="transition-delay:.24s"><div class="bc-icon">📊</div><div><h3 class="bc-title">Dashboard en tiempo real</h3><p class="bc-text">Ves ocupación, ingresos y transacciones desde tu teléfono en cualquier momento.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="s">
+  <div class="wrap">
+    <div class="tim-grid">
+      <div class="reveal">
+        <p class="label">El momento</p>
+        <h2 class="h2">Las plazas que automatizan primero se vuelven <span class="hl">la referencia.</span></h2>
+        <p class="tim-sub">Las que esperan, copian. La ventana está abierta ahorita — pero no para siempre.</p>
+        <div class="tim-quote"><strong>Tu cliente ya no quiere detenerse.</strong> La pregunta es si tu estacionamiento va a estar listo cuando llegue.</div>
+      </div>
+      <div class="tim-blocks reveal">
+        <div class="tb">
+          <p class="tb-label">Hoy en Monterrey</p>
+          <div class="tb-num">2026</div>
+          <p class="tb-text">La mayoría sigue con tickets y cajeros. La ventana está abierta.</p>
+        </div>
+        <div class="tb ac">
+          <p class="tb-label">Para finales de 2026</p>
+          <div class="tb-num">1 de 4</div>
+          <p class="tb-text">pagos en ciudades inteligentes será totalmente automático.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section class="manifesto">
-  <p class="manifesto-text reveal">"Para los que hacen.<br>Para los que recorren<br><span class="highlight">el camino menos transitado.</span><br>Mira adentro.<br>Ahí es donde lo encontrarás."</p>
-  <p class="manifesto-sub reveal">Road Less · Monterrey, N.L. · 2026</p>
+  <div class="wrap">
+    <p class="man-text reveal">Para los que hacen.<br>Para los que recorren <span class="hl">el camino menos transitado.</span></p>
+    <p class="man-sub reveal">Road Less · Monterrey, N.L. · 2026</p>
+  </div>
 </section>
 
-<!-- CTA -->
-<section class="cta-section" id="contacto">
-  <div class="cta-left reveal">
-    <p class="section-tag" style="color:rgba(240,234,216,.4);">Siguiente paso</p>
-    <h2 class="cta-title">Agenda tu<br><em>diagnóstico</em><br>técnico<br>sin costo.</h2>
-    <p class="cta-sub">En menos de 30 minutos evaluamos tu estacionamiento y te mostramos exactamente cómo Road Less funciona en tu plaza. Sin compromisos, sin costo.</p>
-  </div>
-  <div class="cta-right reveal">
-    <a href="https://wa.me/524281312784?text=Hola%2C%20me%20interesa%20agendar%20un%20diagn%C3%B3stico%20t%C3%A9cnico%20gratuito%20para%20mi%20estacionamiento%20con%20Road%20Less." class="cta-btn-wa" target="_blank">
-      <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-      Hablar con Oscar → WhatsApp
-    </a>
-    <p class="cta-note">Respuesta en menos de 2 horas · Diagnóstico sin costo</p>
-    <div class="cta-contact-alt">
-      <a href="mailto:osuc262@gmail.com">✉ osuc262@gmail.com</a>
-      <a href="tel:+524281312784">📞 428 131 2784</a>
+<section class="s" id="contacto">
+  <div class="wrap">
+    <div class="cta-grid">
+      <div class="reveal">
+        <p class="label">Siguiente paso</p>
+        <h2 class="cta-title">Una visita de <span class="hl">30 minutos.</span> Sin compromiso.</h2>
+        <p class="cta-sub">Vamos a tu estacionamiento, evaluamos tu infraestructura y te mostramos cómo quedaría Road Less. Si no te convence, no perdiste nada. Si te convence, en días estás automatizado.</p>
+      </div>
+      <div class="cta-right reveal">
+        <a href="https://wa.me/524281312784?text=Hola%2C%20me%20interesa%20agendar%20un%20diagn%C3%B3stico%20gratuito%20con%20Road%20Less." class="cta-wa" target="_blank">📱 428 131 2784 — WhatsApp</a>
+        <p class="cta-note">Respuesta en menos de 2 horas · Diagnóstico sin costo</p>
+        <div class="cta-links">
+          <a href="mailto:osuc262@gmail.com">✉ osuc262@gmail.com</a>
+          <a href="https://roadlessapp.com">🌐 roadlessapp.com</a>
+        </div>
+        <div class="cta-promise">
+          <div class="cp"><span>Sin costo.</span></div>
+          <div class="cp"><span>Sin letra chica.</span></div>
+          <div class="cp"><span>Sin riesgo.</span></div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- FOOTER -->
 <footer>
-  <span class="footer-logo">
-    <svg style="width:14px;height:22px;fill:rgba(255,255,255,.3)" viewBox="0 0 24 40"><rect x="10" y="0" width="4" height="30" rx="2"/><rect x="2" y="10" width="8" height="4" rx="2"/><rect x="2" y="10" width="4" height="10" rx="2"/><rect x="14" y="15" width="8" height="4" rx="2"/><rect x="18" y="15" width="4" height="8" rx="2"/><rect x="10" y="30" width="4" height="10" rx="2"/></svg>
-    Road Less
-  </span>
-  <span class="footer-copy">© 2026 Road Less · Monterrey, N.L. · Estaciona y paga sin manos</span>
+  <div class="footer-inner">
+    <span class="f-logo">🌵 Road Less</span>
+    <span class="f-copy">© 2026 Road Less · Monterrey, N.L. · Estaciona y paga sin manos</span>
+  </div>
 </footer>
 
 <script>
-/* SCROLL REVEAL */
 const revEls=document.querySelectorAll('.reveal');
-const revObs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');}),{threshold:.1});
+const revObs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');}),{threshold:.08});
 revEls.forEach(r=>revObs.observe(r));
 
-/* HELPERS */
-const lerp=(a,b,t)=>a+(b-a)*t;
-const eio=t=>t<.5?2*t*t:-1+(4-2*t)*t;
-const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
-
-/* CAR DRAWING */
-function drawCar(ctx,x,y,facing){
-  ctx.save();ctx.translate(x,y);ctx.scale(facing,1);
-  const bw=50,bh=26,br=7;
-  ctx.save();
-  ctx.shadowColor='rgba(0,0,0,.28)';ctx.shadowBlur=12;ctx.shadowOffsetY=5;
-  ctx.beginPath();ctx.roundRect(-bw/2,-bh/2,bw,bh,br);ctx.fillStyle='#2d5a3d';ctx.fill();
-  ctx.restore();
-  ctx.beginPath();ctx.roundRect(-bw/2,-bh/2,bw,bh,br);ctx.fillStyle='#2d5a3d';ctx.fill();
-  ctx.beginPath();ctx.roundRect(-14,-bh/2-11,26,14,4);ctx.fillStyle='#1a3a2a';ctx.fill();
-  ctx.fillStyle='rgba(168,216,176,.88)';
-  ctx.beginPath();ctx.roundRect(-13,-bh/2-10,11,11,2);ctx.fill();
-  ctx.beginPath();ctx.roundRect(1,-bh/2-10,11,11,2);ctx.fill();
-  [[-bw/2+9,bh/2-2],[bw/2-9,bh/2-2]].forEach(([wx,wy])=>{
-    ctx.beginPath();ctx.arc(wx,wy,7,0,Math.PI*2);ctx.fillStyle='#111';ctx.fill();
-    ctx.beginPath();ctx.arc(wx,wy,3.2,0,Math.PI*2);ctx.fillStyle='#666';ctx.fill();
-  });
-  ctx.fillStyle='rgba(240,234,216,.95)';
-  ctx.beginPath();ctx.roundRect(bw/2-3,-6,4,6,1);ctx.fill();
-  ctx.beginPath();ctx.roundRect(bw/2-3,0,4,6,1);ctx.fill();
-  ctx.fillStyle='rgba(192,57,43,.9)';
-  ctx.beginPath();ctx.roundRect(-bw/2,-6,4,6,1);ctx.fill();
-  ctx.beginPath();ctx.roundRect(-bw/2,0,4,6,1);ctx.fill();
-  ctx.fillStyle='#d4c9a8';
-  ctx.beginPath();ctx.roundRect(-15,bh/2-4,30,9,2);ctx.fill();
-  ctx.fillStyle='#1a3a2a';
-  ctx.font='bold 5.5px monospace';ctx.textAlign='center';ctx.textBaseline='middle';
-  ctx.fillText('VEA-011-B',0,bh/2+0.5);
-  ctx.restore();
-}
-
-/* HOW SECTION ANIMATION */
 (function(){
-  const stage=document.getElementById('animStage');
-  if(!stage)return;
-  const canvas=document.getElementById('animCanvas');
-  const ctx=canvas.getContext('2d');
-  const armEntry=document.getElementById('animArmEntry');
-  const armExit=document.getElementById('animArmExit');
-  const scanBeam=document.getElementById('animScanBeam');
-  const plateBubble=document.getElementById('animPlateBubble');
-  const parking=document.getElementById('animParking');
-  const aIcon=document.getElementById('animIcon');
-  const aTitle=document.getElementById('animTitle');
-  const aSub=document.getElementById('animSub');
-  const stepEls=[0,1,2].map(i=>document.getElementById('as'+i));
+  const stage = document.getElementById('animStage');
+  if(!stage) return;
+  const cv = document.getElementById('animCv');
+  const ctx = cv.getContext('2d');
+  const apTitle = document.getElementById('apTitle');
+  const apStep = document.getElementById('apStep');
+  const pills = [0,1,2].map(i => document.getElementById('pl'+i));
 
-  function resize(){canvas.width=stage.offsetWidth;canvas.height=stage.offsetHeight;}
-  resize();
-  window.addEventListener('resize',resize);
+  const AC = '#c8e85a';
+  const ACr = '200,232,90';
 
-  const W=()=>canvas.width;
-  const H=()=>canvas.height;
+  function resize(){ cv.width = stage.offsetWidth; cv.height = stage.offsetHeight; }
+  resize(); window.addEventListener('resize', resize);
+  const W = () => cv.width, H = () => cv.height;
 
-  function setA(icon,title,sub){aIcon.textContent=icon;aTitle.textContent=title;aSub.textContent=sub;}
-  function setStep(idx){
-    stepEls.forEach((el,i)=>{
-      el.classList.remove('active','done');
-      if(i<idx)el.classList.add('done');
-      else if(i===idx)el.classList.add('active');
+  // easing
+  const eio = t => t<.5 ? 2*t*t : -1+(4-2*t)*t;
+  const lerp = (a,b,t) => a+(b-a)*t;
+  const clamp = (v,lo,hi) => Math.max(lo,Math.min(hi,v));
+
+  function setPill(n){
+    pills.forEach((p,i)=>{
+      p.classList.remove('active','done');
+      if(i<n) p.classList.add('done');
+      else if(i===n) p.classList.add('active');
     });
   }
+  function setUI(step, title, plate){
+    apStep.textContent = step;
+    apTitle.textContent = title;
 
-  const PH={APPROACH:0,SCAN:1,ENTER:2,TO_PARK:3,PARKED:4,LEAVE:5,TO_EXIT:6,EXIT:7};
-  const DUR={APPROACH:2.5,SCAN:3.2,ENTER:1.0,TO_PARK:1.4,PARKED:4.5,LEAVE:1.2,TO_EXIT:1.6,EXIT:2.2};
-  let ph=PH.APPROACH,pt=0,last=null,carX=0,carY=0,carF=1;
+  }
 
-  function xp(){
-    const w=W();
-    return{offL:-65,entry:70,entryPast:125,center:w/2,exitPast:w-125,exit:w-70,offR:w+65};
+  // ---- DRAW FUNCTIONS ----
+
+  function drawRoad(){
+    const w=W(), h=H(), cy=h/2;
+    const rh = 70;
+
+    // asphalt
+    ctx.fillStyle = '#0f0f0f';
+    ctx.fillRect(0, cy-rh/2, w, rh);
+
+    // lane markings - dashed center line
+    ctx.setLineDash([18,14]);
+    ctx.strokeStyle = 'rgba(255,255,255,0.07)';
+    ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(0,cy); ctx.lineTo(w,cy); ctx.stroke();
+    ctx.setLineDash([]);
+
+    // edge lines
+    ctx.strokeStyle = 'rgba(255,255,255,0.05)';
+    ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(0,cy-rh/2); ctx.lineTo(w,cy-rh/2); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(0,cy+rh/2); ctx.lineTo(w,cy+rh/2); ctx.stroke();
+
+    // subtle road glow
+    const rg = ctx.createLinearGradient(0,cy-rh/2,0,cy+rh/2);
+    rg.addColorStop(0,'rgba(200,232,90,0.015)');
+    rg.addColorStop(0.5,'rgba(200,232,90,0.004)');
+    rg.addColorStop(1,'rgba(200,232,90,0.015)');
+    ctx.fillStyle = rg;
+    ctx.fillRect(0, cy-rh/2, w, rh);
+  }
+
+  // LPR Camera unit
+  function drawCamera(x, y, side, active, scanning){
+    ctx.save(); ctx.translate(x,y);
+
+    // mount arm
+    ctx.fillStyle = '#1a1a1a';
+    ctx.strokeStyle = 'rgba(255,255,255,0.12)';
+    ctx.lineWidth = 1;
+    const armW = 4, armH = side==='top'?-22:22;
+    ctx.beginPath();
+    ctx.roundRect(-2, 0, armW, armH, 2);
+    ctx.fill(); ctx.stroke();
+
+    const cy2 = armH;
+
+    // camera body
+    const bw=28, bh=14;
+    ctx.fillStyle = '#1e1e1e';
+    ctx.strokeStyle = active ? `rgba(${ACr},0.5)` : 'rgba(255,255,255,0.1)';
+    ctx.lineWidth = active ? 1.5 : 1;
+    ctx.beginPath();
+    ctx.roundRect(-bw/2, cy2-(side==='top'?bh:0), bw, bh, 4);
+    ctx.fill(); ctx.stroke();
+
+    // lens
+    const lx = 0, ly = cy2 - (side==='top' ? bh/2 : -bh/2);
+    ctx.beginPath(); ctx.arc(lx, ly, 4, 0, Math.PI*2);
+    ctx.fillStyle = active ? AC : '#333'; ctx.fill();
+    if(active){
+      ctx.beginPath(); ctx.arc(lx, ly, 7, 0, Math.PI*2);
+      ctx.strokeStyle = `rgba(${ACr},0.3)`; ctx.lineWidth=1; ctx.stroke();
+    }
+
+    // scan beam
+    if(scanning){
+      const bLen = 45;
+      const grad = ctx.createLinearGradient(lx, ly, lx, ly + (side==='top'? bLen : -bLen));
+      grad.addColorStop(0, `rgba(${ACr},0.5)`);
+      grad.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.save();
+      ctx.beginPath();
+      ctx.moveTo(lx-12, ly + (side==='top'? bLen:-bLen));
+      ctx.lineTo(lx+12, ly + (side==='top'? bLen:-bLen));
+      ctx.lineTo(lx+4, ly); ctx.lineTo(lx-4, ly);
+      ctx.closePath();
+      ctx.fillStyle = grad; ctx.fill();
+      ctx.restore();
+    }
+
+    ctx.restore();
+  }
+
+  // Gate / barrier
+  function drawGate(x, open, label){
+    const h = H(), cy = h/2;
+    ctx.save(); ctx.translate(x, cy);
+
+    // post
+    ctx.fillStyle = '#1e1e1e';
+    ctx.strokeStyle = 'rgba(255,255,255,0.15)';
+    ctx.lineWidth=1;
+    ctx.beginPath(); ctx.roundRect(-4,-38,8,76,3); ctx.fill(); ctx.stroke();
+
+    // base
+    ctx.fillStyle='#161616';
+    ctx.beginPath(); ctx.roundRect(-10,32,20,10,3); ctx.fill();
+
+    // barrier arm
+    const armLen = 55;
+    const angle = open ? -Math.PI/2 : 0;
+    ctx.save(); ctx.translate(4, -28);
+    ctx.rotate(angle);
+    // arm body with stripes
+    for(let i=0;i<armLen;i+=12){
+      ctx.fillStyle = (Math.floor(i/12)%2===0) ? AC : '#1a1a1a';
+      const w = Math.min(12, armLen-i);
+      ctx.fillRect(i, -3.5, w, 7);
+    }
+    ctx.strokeStyle = 'rgba(0,0,0,0.3)';
+    ctx.lineWidth=0.5;
+    ctx.strokeRect(0,-3.5,armLen,7);
+    ctx.restore();
+
+    // label
+    ctx.fillStyle = 'rgba(255,255,255,0.3)';
+    ctx.font = '500 8px Inter, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.letterSpacing = '0.1em';
+    ctx.fillText(label.toUpperCase(), 0, 52);
+
+    ctx.restore();
+  }
+
+  // LPR scan flash on car
+  function drawScanFlash(x, y, alpha){
+    if(alpha <= 0) return;
+    const g = ctx.createRadialGradient(x,y,0,x,y,40);
+    g.addColorStop(0, `rgba(${ACr},${alpha*0.6})`);
+    g.addColorStop(0.4, `rgba(${ACr},${alpha*0.2})`);
+    g.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = g;
+    ctx.beginPath(); ctx.arc(x,y,40,0,Math.PI*2); ctx.fill();
+  }
+
+  // Carrito cute vista lateral
+  function drawCar(x, y, facing){
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.scale(facing, 1);
+
+    // sombra
+    ctx.beginPath();
+    ctx.ellipse(0, 18, 28, 4, 0, 0, Math.PI*2);
+    ctx.fillStyle='rgba(0,0,0,0.3)';
+    ctx.fill();
+
+    // cuerpo principal — rechoncho y adorable
+    ctx.beginPath();
+    ctx.roundRect(-30, -4, 60, 18, 8);
+    const bodyG = ctx.createLinearGradient(0,-4,0,14);
+    bodyG.addColorStop(0,'#e82020');
+    bodyG.addColorStop(0.5,'#cc1515');
+    bodyG.addColorStop(1,'#991010');
+    ctx.fillStyle=bodyG; ctx.fill();
+
+    // cabina grande y redondeada (cute)
+    ctx.beginPath();
+    ctx.moveTo(-18, -4);
+    ctx.bezierCurveTo(-18,-22, -10,-28, 0,-28);
+    ctx.bezierCurveTo(10,-28, 20,-22, 22,-4);
+    ctx.closePath();
+    const cabG = ctx.createLinearGradient(0,-28,0,-4);
+    cabG.addColorStop(0,'#d41818');
+    cabG.addColorStop(1,'#bb1414');
+    ctx.fillStyle=cabG; ctx.fill();
+
+    // ventana grande y redondeada
+    ctx.beginPath();
+    ctx.moveTo(-13,-5);
+    ctx.bezierCurveTo(-13,-18,-7,-22,0,-22);
+    ctx.bezierCurveTo(7,-22,15,-18,16,-5);
+    ctx.closePath();
+    const winG = ctx.createLinearGradient(0,-22,0,-5);
+    winG.addColorStop(0,'rgba(150,210,255,0.9)');
+    winG.addColorStop(1,'rgba(100,170,220,0.7)');
+    ctx.fillStyle=winG; ctx.fill();
+    ctx.strokeStyle='rgba(255,255,255,0.3)'; ctx.lineWidth=0.8; ctx.stroke();
+
+    // reflejo ventana
+    ctx.beginPath();
+    ctx.moveTo(-10,-20); ctx.bezierCurveTo(-8,-24,0,-24,4,-20);
+    ctx.bezierCurveTo(0,-20,-6,-20,-10,-20);
+    ctx.closePath();
+    ctx.fillStyle='rgba(255,255,255,0.2)'; ctx.fill();
+
+    // faro delantero — círculo cute
+    ctx.beginPath();
+    ctx.arc(26, 2, 5, 0, Math.PI*2);
+    ctx.fillStyle='rgba(255,248,180,0.95)'; ctx.fill();
+    ctx.strokeStyle='rgba(255,255,255,0.4)'; ctx.lineWidth=1; ctx.stroke();
+    // glow
+    const hg = ctx.createRadialGradient(26,2,0,26,2,12);
+    hg.addColorStop(0,'rgba(255,248,180,0.5)');
+    hg.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=hg; ctx.beginPath(); ctx.arc(26,2,12,0,Math.PI*2); ctx.fill();
+
+    // faro trasero — redondito
+    ctx.beginPath();
+    ctx.arc(-27, 2, 4, 0, Math.PI*2);
+    ctx.fillStyle='rgba(220,20,20,0.95)'; ctx.fill();
+    ctx.strokeStyle='rgba(255,100,100,0.4)'; ctx.lineWidth=1; ctx.stroke();
+    const tg = ctx.createRadialGradient(-27,2,0,-27,2,10);
+    tg.addColorStop(0,'rgba(220,20,20,0.4)');
+    tg.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=tg; ctx.beginPath(); ctx.arc(-27,2,10,0,Math.PI*2); ctx.fill();
+
+    // ruedas — gorditas y cute
+    [[-18, 14], [18, 14]].forEach(([wx,wy], idx)=>{
+      const R = 9;
+      // arco guardafango
+      ctx.beginPath();
+      ctx.arc(wx, wy, R+3, Math.PI, 0);
+      ctx.fillStyle='#991010'; ctx.fill();
+
+      // neumático gordo
+      ctx.beginPath(); ctx.arc(wx, wy, R, 0, Math.PI*2);
+      ctx.fillStyle='#1a1a1a'; ctx.fill();
+      ctx.strokeStyle='rgba(255,255,255,0.08)'; ctx.lineWidth=1.5; ctx.stroke();
+
+      // rin blanco simple
+      ctx.beginPath(); ctx.arc(wx, wy, R*0.65, 0, Math.PI*2);
+      ctx.fillStyle='#e0e0e0'; ctx.fill();
+
+      // rayos simples x4
+      for(let a=0;a<Math.PI*2;a+=Math.PI/2){
+        ctx.save(); ctx.translate(wx,wy); ctx.rotate(a + idx*0.4);
+        ctx.beginPath();
+        ctx.moveTo(-1,1); ctx.lineTo(-1,R*0.62); ctx.lineTo(1,R*0.62); ctx.lineTo(1,1);
+        ctx.fillStyle='#bbb'; ctx.fill();
+        ctx.restore();
+      }
+
+      // centro
+      ctx.beginPath(); ctx.arc(wx,wy,R*0.18,0,Math.PI*2);
+      ctx.fillStyle='#555'; ctx.fill();
+    });
+
+    // plaquita
+    ctx.beginPath(); ctx.roundRect(10, 8, 18, 6, 2);
+    ctx.fillStyle=AC; ctx.fill();
+    ctx.fillStyle='#0a0a0a'; ctx.font='bold 4px monospace';
+    ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText('VEA·011', 19, 11);
+
+    ctx.restore();
+  }
+
+
+  let platePopAlpha = 0;
+
+  // ---- PHASES ----
+  const PH={AP:0,SC:1,EN:2,PK:3,WA:4,LV:5,EX:6};
+  const DUR={AP:2.8,SC:2.8,EN:1.2,PK:5,WA:1,LV:1.4,EX:2.2};
+  let ph=0, pt=0, last=null, carX=0, carY=0, carDir=1;
+  let gateEntryOpen=false, gateExitOpen=false;
+  let scanning=0, scanFlash=0;
+
+  function xpts(){ const w=W(); return {L:-80,e:w*0.14,pk:w*0.5,xp:w*0.86,R:w+80}; }
+
+  function reset(){
+    ph=0;pt=0;last=null;
+    gateEntryOpen=false;gateExitOpen=false;
+    scanning=0;scanFlash=0;
+    platePopAlpha=0;
   }
 
   function tick(ts){
     if(!last)last=ts;
-    const dt=(ts-last)/1000;last=ts;pt+=dt;
-    const cx=xp(),cy=H()/2;
+    const dt=Math.min((ts-last)/1000,.05);last=ts;pt+=dt;
+    const p=xpts(), cy=H()/2;
 
     switch(ph){
-      case PH.APPROACH:{
-        const p=eio(clamp(pt/DUR.APPROACH,0,1));
-        carX=lerp(cx.offL,cx.entry-4,p);carY=cy;carF=1;
-        armEntry.classList.remove('open');armExit.classList.remove('open');
-        scanBeam.classList.remove('show');plateBubble.classList.remove('show');
-        parking.classList.remove('occupied');parking.textContent='P';
-        setStep(0);
-        setA('🚗','El carrito se acerca a la entrada','PLACA: VEA-011-B — DETECTADA POR LA CÁMARA');
-        if(pt>=DUR.APPROACH)next();
+      case PH.AP:{
+        const t=eio(clamp(pt/DUR.AP,0,1));
+        carX=lerp(p.L,p.e-10,t); carY=cy; carDir=1;
+        scanning=0; gateEntryOpen=false; gateExitOpen=false;
+        setPill(0); setUI('Paso 1 de 3','El cliente se acerca — cámara LPR lista');
+        if(pt>=DUR.AP){ph++;pt=0;}
         break;
       }
-      case PH.SCAN:{
-        carX=cx.entry-4;carY=cy;carF=1;
-        const t=pt/DUR.SCAN;setStep(0);
-        if(t<.25){
-          scanBeam.classList.add('show');
-          setA('📷','La cámara lee la placa al instante','SIN QUE EL CONDUCTOR HAGA NADA');
-        }else if(t<.55){
-          scanBeam.classList.remove('show');plateBubble.classList.add('show');
-          setA('✅','VEA-011-B verificada','ACCESO AUTORIZADO AUTOMÁTICAMENTE');
-        }else{
-          plateBubble.classList.remove('show');armEntry.classList.add('open');
-          setA('🔓','La pluma sube sola','EL CARRITO PUEDE ENTRAR SIN DETENERSE');
-        }
-        if(pt>=DUR.SCAN)next();
+      case PH.SC:{
+        carX=p.e-10; carY=cy; carDir=1;
+        const t2=pt/DUR.SC;
+        if(t2<0.3){ scanning=1; setUI('Paso 1 de 3','Cámara leyendo la placa...'); }
+        else if(t2<0.7){ scanning=0; scanFlash=1-((t2-0.3)/0.4); setUI('Paso 1 de 3','Placa verificada · Acceso autorizado'); }
+        else { scanning=0; scanFlash=0; gateEntryOpen=true; setUI('Paso 1 de 3','Pluma abre · El cliente no se detuvo'); }
+        setPill(0);
+        if(pt>=DUR.SC){ph++;pt=0;}
         break;
       }
-      case PH.ENTER:{
-        const p=eio(clamp(pt/DUR.ENTER,0,1));
-        carX=lerp(cx.entry-4,cx.entryPast,p);carY=cy;carF=1;
-        setA('➡️','Entra sin parar ni tocar nada','LA PLUMA BAJA SOLA DETRÁS DE ÉL');
-        if(pt>=DUR.ENTER){armEntry.classList.remove('open');next();}
+      case PH.EN:{
+        const t=eio(clamp(pt/DUR.EN,0,1));
+        carX=lerp(p.e-10,p.pk-10,t); carY=cy; carDir=1;
+        gateEntryOpen=true;
+        setUI('Paso 1 de 3','Entrando sin detenerse — sin tocar nada');
+        if(pt>=DUR.EN){ gateEntryOpen=false; ph++;pt=0; }
         break;
       }
-      case PH.TO_PARK:{
-        const p=eio(clamp(pt/DUR.TO_PARK,0,1));
-        carX=lerp(cx.entryPast,cx.center,p);carY=cy;carF=1;
-        parking.classList.add('occupied');parking.textContent='';
-        setStep(1);setA('🅿️','Buscando su cajón','EL SISTEMA LO GUÍA AUTOMÁTICAMENTE');
-        if(pt>=DUR.TO_PARK)next();
+      case PH.PK:{
+        carX=p.pk-10+Math.sin(pt*2)*1.5; carY=cy; carDir=-1;
+        const r=pt/DUR.PK;
+        setPill(1);
+        if(r<0.33) setUI('Paso 2 de 3','Tiempo registrado automáticamente');
+        else if(r<0.66) setUI('Paso 2 de 3','Sin ticket · Road Less lleva la cuenta');
+        else setUI('Paso 2 de 3','Cobro preparado — $67 MXN para salida');
+        if(pt>=DUR.PK){ph++;pt=0;}
         break;
       }
-      case PH.PARKED:{
-        carX=cx.center;carY=cy+Math.sin(pt*2.8)*2.5;carF=-1;
-        parking.classList.add('occupied');setStep(1);
-        const r=pt/DUR.PARKED;
-        if(r<.30)setA('⏱️','Tiempo registrado automáticamente','EL USUARIO DISFRUTA SU VISITA');
-        else if(r<.62)setA('☕','Sin pensar en tickets ni cajas','ROAD LESS LLEVA LA CUENTA SOLO');
-        else setA('💳','Cobro listo para cuando salga','SE CARGARÁ A SU TARJETA AL SALIR');
-        if(pt>=DUR.PARKED)next();
+      case PH.WA:{
+        carX=lerp(p.pk-10,p.xp+10,eio(clamp(pt/DUR.WA,0,1)));
+        carY=cy; carDir=1;
+        setPill(2); setUI('Paso 3 de 3','$67 MXN cobrado · Saliendo...');
+        if(pt>=DUR.WA){ph++;pt=0;}
         break;
       }
-      case PH.LEAVE:{
-        const p=eio(clamp(pt/DUR.LEAVE,0,1));
-        carX=lerp(cx.center,cx.exitPast,p);carY=cy;carF=1;
-        parking.classList.remove('occupied');parking.textContent='P';
-        setStep(2);setA('💳','Cobro automático — $67 MXN','CARGADO A SU TARJETA. SIN PARAR, SIN CAJAS');
-        if(pt>=DUR.LEAVE)next();
+      case PH.LV:{
+        carX=p.xp+10; carY=cy; carDir=1;
+        const t2=pt/DUR.LV;
+        if(t2<0.4){ scanning=2; setUI('Paso 3 de 3','Cámara de salida confirma placa'); }
+        else { scanning=0; gateExitOpen=true; setUI('Paso 3 de 3','Pluma abre · Cobro automático completado'); }
+        setPill(2);
+        if(pt>=DUR.LV){ph++;pt=0;}
         break;
       }
-      case PH.TO_EXIT:{
-        const p=eio(clamp(pt/DUR.TO_EXIT,0,1));
-        carX=lerp(cx.exitPast,cx.exit-4,p);carY=cy;carF=1;
-        armExit.classList.add('open');
-        setStep(2);setA('🔓','La pluma de salida sube sola','SIN FILAS, SIN PAGAR EN CAJA');
-        if(pt>=DUR.TO_EXIT)next();
-        break;
-      }
-      case PH.EXIT:{
-        const p=eio(clamp(pt/DUR.EXIT,0,1));
-        carX=lerp(cx.exit-4,cx.offR,p);carY=cy;carF=1;
-        if(p>.45)armExit.classList.remove('open');
-        setStep(2);setA('👋','¡Salió sin parar ni pagar en caja!','ASÍ FUNCIONA ROAD LESS — SIEMPRE');
-        if(pt>=DUR.EXIT)reset();
+      case PH.EX:{
+        const t=eio(clamp(pt/DUR.EX,0,1));
+        carX=lerp(p.xp+10,p.R,t); carY=cy; carDir=1;
+        gateExitOpen=true;
+        setUI('Paso 3 de 3','¡Salió sin parar, sin pagar en caja!');
+        if(pt>0.8*DUR.EX) gateExitOpen=false;
+        if(pt>=DUR.EX) reset();
         break;
       }
     }
 
+    // DRAW
     ctx.clearRect(0,0,W(),H());
-    drawCar(ctx,carX,carY,carF);
+
+    // background
+    ctx.fillStyle='#080808';
+    ctx.fillRect(0,0,W(),H());
+
+    // subtle grid in bg
+    ctx.strokeStyle='rgba(200,232,90,0.018)';
+    ctx.lineWidth=0.5;
+    for(let x=0;x<W();x+=50){ ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H());ctx.stroke(); }
+    for(let y=0;y<H();y+=50){ ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W(),y);ctx.stroke(); }
+
+    const pts=xpts();
+
+    drawRoad();
+
+    drawCamera(pts.e, H()/2-35, 'top', true, scanning===1);
+    drawCamera(pts.xp, H()/2+35, 'bottom', true, scanning===2);
+    drawGate(pts.e, gateEntryOpen, 'Entrada');
+    drawGate(pts.xp, gateExitOpen, 'Salida');
+
+    // scan flash on car
+    if(scanFlash>0) drawScanFlash(carX, carY, scanFlash);
+
+    drawCar(carX, carY, carDir);
+
     requestAnimationFrame(tick);
   }
+  requestAnimationFrame(tick);
+})();
 
-  function next(){ph++;pt=0;}
-  function reset(){
-    ph=PH.APPROACH;pt=0;last=null;
-    armEntry.classList.remove('open');armExit.classList.remove('open');
-    scanBeam.classList.remove('show');plateBubble.classList.remove('show');
-    parking.classList.remove('occupied');parking.textContent='P';
+// FONDO GLOBAL ANIMADO v3
+(function(){
+  const canvas = document.getElementById('globalBg');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let W, H, t = 0;
+  const A = '200,232,90';
+
+  // --- PARTÍCULAS ---
+  const PARTS = 120;
+  const parts = [];
+
+  // --- ORBS ---
+  const orbs = [
+    {x:0.2, y:0.3, r:320, vx:0.00018, vy:0.00012, ph:0},
+    {x:0.8, y:0.7, r:280, vx:-0.00014, vy:0.00016, ph:1.5},
+    {x:0.5, y:0.1, r:240, vx:0.00020, vy:0.00010, ph:3.0},
+    {x:0.1, y:0.8, r:200, vx:0.00012, vy:-0.00018, ph:4.5},
+  ];
+
+  function resize(){
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  function mkPart(){
+    return {
+      x: Math.random()*W, y: Math.random()*H,
+      vx: (Math.random()-0.5)*0.7,
+      vy: (Math.random()-0.5)*0.5,
+      r: 0.8 + Math.random()*2,
+      alpha: 0.2 + Math.random()*0.5,
+      pulse: Math.random()*Math.PI*2,
+      pulseSpeed: 0.008 + Math.random()*0.025
+    };
   }
 
-  requestAnimationFrame(tick);
+  for(let i=0;i<PARTS;i++) parts.push(mkPart());
+
+  // conexiones entre partículas
+  function drawConnections(){
+    for(let i=0;i<parts.length;i++){
+      for(let j=i+1;j<parts.length;j++){
+        const dx=parts[i].x-parts[j].x, dy=parts[i].y-parts[j].y;
+        const d=Math.sqrt(dx*dx+dy*dy);
+        if(d<130){
+          const a=(1-d/130)*0.18;
+          ctx.beginPath();
+          ctx.moveTo(parts[i].x,parts[i].y);
+          ctx.lineTo(parts[j].x,parts[j].y);
+          ctx.strokeStyle=`rgba(${A},${a})`;
+          ctx.lineWidth=0.5;
+          ctx.stroke();
+        }
+      }
+    }
+  }
+
+  function drawParts(){
+    for(const p of parts){
+      p.pulse += p.pulseSpeed;
+      const a = p.alpha*(0.6+0.4*Math.sin(p.pulse));
+      // halo
+      const g=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r*4);
+      g.addColorStop(0,`rgba(${A},${a*0.4})`);
+      g.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.fillStyle=g;
+      ctx.beginPath();ctx.arc(p.x,p.y,p.r*4,0,Math.PI*2);ctx.fill();
+      // core
+      ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(${A},${a})`;ctx.fill();
+
+      p.x+=p.vx; p.y+=p.vy;
+      if(p.x<-20)p.x=W+20; if(p.x>W+20)p.x=-20;
+      if(p.y<-20)p.y=H+20; if(p.y>H+20)p.y=-20;
+    }
+  }
+
+
+  function drawOrbs(){
+    for(const o of orbs){
+      o.x+=o.vx; o.y+=o.vy;
+      if(o.x<-0.1)o.x=1.1; if(o.x>1.1)o.x=-0.1;
+      if(o.y<-0.1)o.y=1.1; if(o.y>1.1)o.y=-0.1;
+      o.ph+=0.004;
+      const px=o.x*W, py=o.y*H;
+      const pulse=0.65+0.35*Math.sin(o.ph);
+      const rad=o.r*pulse;
+      const g=ctx.createRadialGradient(px,py,0,px,py,rad);
+      g.addColorStop(0,`rgba(${A},0.06)`);
+      g.addColorStop(0.4,`rgba(${A},0.025)`);
+      g.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.fillStyle=g;
+      ctx.beginPath();ctx.arc(px,py,rad,0,Math.PI*2);ctx.fill();
+    }
+  }
+
+  // grid que ondula
+  function drawGrid(){
+    t+=0.008;
+    const gs=70;
+    for(let x=0;x<=W;x+=gs){
+      const wave=Math.sin(t+x*0.01)*3;
+      ctx.beginPath();
+      for(let y=0;y<=H;y+=4){
+        const wx=x+Math.sin(t*0.7+y*0.012)*2.5+wave;
+        y===0?ctx.moveTo(wx,y):ctx.lineTo(wx,y);
+      }
+      ctx.strokeStyle=`rgba(${A},0.028)`;
+      ctx.lineWidth=0.5;ctx.stroke();
+    }
+    for(let y=0;y<=H;y+=gs){
+      const wave=Math.sin(t*0.8+y*0.01)*3;
+      ctx.beginPath();
+      for(let x=0;x<=W;x+=4){
+        const wy=y+Math.sin(t*0.6+x*0.012)*2.5+wave;
+        x===0?ctx.moveTo(x,wy):ctx.lineTo(x,wy);
+      }
+      ctx.strokeStyle=`rgba(${A},0.028)`;
+      ctx.lineWidth=0.5;ctx.stroke();
+    }
+  }
+
+  function frame(){
+    ctx.clearRect(0,0,W,H);
+    drawOrbs();
+    drawGrid();
+    drawConnections();
+    drawParts();
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
 })();
 </script>
 </body>
